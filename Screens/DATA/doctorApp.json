@@ -1,0 +1,69 @@
+[
+    {
+        "key": "1",
+        "availableSlots":"15",
+        "date":"Mon, 06 Dec",
+        "time":"12:00 pm - 05:00 pm",
+        "slot":"12:00 pm - 12:30 pm",
+        "date1":"Monday, 06 December 2022"
+        
+    },
+    {
+        "key": "2",
+        "availableSlots":"25",
+        "date":"Mon, 06 Dec",
+        "time":"12:00 pm - 05:00 pm",
+        "slot":"12:35 pm - 01:05 pm"
+    },
+    {
+      "key": "3",
+      "availableSlots":"22",
+      "date":"Mon, 06 Dec",
+      "time":"12:00 pm - 05:00 pm",
+      "slot":"01:10 pm - 01:40 pm"
+  },
+  {
+    "key": "4",
+    "availableSlots":"20",
+    "date":"Mon, 06 Dec",
+    "time":"12:00 pm - 05:00 pm",
+    "slot":"01:45 pm - 02:15 pm"
+  },
+  {
+    "key": "5",
+    "availableSlots":"27",
+    "date":"Mon, 06 Dec",
+    "time":"12:00 pm - 05:00 pm",
+    "slot":"02:20 pm - 02:50 pm"
+  }
+,
+{
+  "key": "6",
+  "availableSlots":"18",
+  "date":"Mon, 06 Dec",
+  "time":"12:00 pm - 05:00 pm",
+  "slot":"02:55 pm - 03:25 pm"
+}
+,
+{
+  "key": "7",
+  "availableSlots":"21",
+  "date":"Mon, 06 Dec",
+  "time":"12:00 pm - 05:00 pm",
+  "slot":"03:30 pm - 04:00 pm"
+}
+,
+{
+  "key": "8",
+  "availableSlots":"25",
+  "date":"Mon, 06 Dec",
+  "time":"12:00 pm - 05:00 pm",
+  "slot":"04:05 pm - 04:35 pm"
+}
+
+
+
+
+    
+]
+

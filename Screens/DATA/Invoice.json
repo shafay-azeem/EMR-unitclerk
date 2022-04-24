@@ -1,0 +1,11 @@
+{
+    "InvoiceID ": "BROG - TELE - 006007",
+   "InvoiceDate" : "19/01/2021 - 01:25 pm",
+   "patientName" : "Shafay Azeem",
+   "IssuedBy ": "AFMC",
+   "TeleconsultationPayment": "500 PKR",
+   "AppointmentDate":"Monday, 06 December 2022",
+   "AppointmentTime":"12:00 pm",
+   "PatientId":"12678"
+
+}
