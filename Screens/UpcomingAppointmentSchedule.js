@@ -96,39 +96,27 @@ function Item({ item }) {
     }
 
 
-export default class UpcomingAppointmentSchedule extends Component {
-   doctorName = "Dr Ahmed Khan";
-   specality = "MBBS";
-   constructor(props){
-   super(props);
-   }
-   numColumns = 4
 
-  render(){
-    
-
-    
-    const formatData = (data, numColumns) => {
-
-      
-      
+  const UpcomingAppointmentSchedule = () => {
   
-      const numberOfFullRows = Math.floor(8 / numColumns);
- 
-    
-      let numberOfElementsLastRow = 8 - (numberOfFullRows * numColumns);
-      while (numberOfElementsLastRow !== numColumns && numberOfElementsLastRow !== 0) {
-        data.push({ key: `blank-${numberOfElementsLastRow}`, empty: true });
-        numberOfElementsLastRow++;
-      }
-      // const [isScrollEnabled, setIsScrollEnabled] = useState(false);
- return data;
-    
-    };
     doctorName = "Dr Ahmed Khan";
-    specality = "Medicine";
-
+    specality = "MBBS";
+   
+   let  numColumns = 4;
+    const formatData = (data, numColumns) => {
+     const numberOfFullRows = Math.floor(data.length / numColumns);
+  
+       let numberOfElementsLastRow = 8 - (numberOfFullRows * numColumns);
+       while (numberOfElementsLastRow !== numColumns && numberOfElementsLastRow !== 0) {
+         data.push({ key: `blank-${numberOfElementsLastRow}`, empty: true });
+         numberOfElementsLastRow++;
+        
+       }
+       return data;
+     };
     
+   
+  
     return (
   
         <View style={styles.container} >
@@ -143,10 +131,10 @@ export default class UpcomingAppointmentSchedule extends Component {
         <FlatList
   
           style={{flex:1, marginTop: 30, margin: 40}}
-          data={ formatData(patientDoc, this.numColumns)}
+          data={ formatData(patientDoc,numColumns)}
           renderItem={({ item }) => <Item item={item}/>}
           keyExtractor={item => item.email}
-          numColumns = {this.numColumns}
+          numColumns = {numColumns}
           // scrollEnabled={isScrollEnabled}
         />
 </SafeAreaView>
@@ -157,4 +145,4 @@ export default class UpcomingAppointmentSchedule extends Component {
      
     );
   }
-}
+export default UpcomingAppointmentSchedule;

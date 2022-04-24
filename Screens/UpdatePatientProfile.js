@@ -36,6 +36,7 @@ import UnitClerkHeader from './AllHeaders/UnitClerkHeader';
     let[password,setpassword] = useState('')
     let[Email,setEmail] = useState('')
     let[confirmpassword,setconfirmpassword] = useState('')
+    const [checked, setChecked] = useState(false);
     
     let[gender,setgender] = useState('Male')
     let [date, setDate] = useState('');
@@ -383,6 +384,12 @@ import UnitClerkHeader from './AllHeaders/UnitClerkHeader';
 <View style={{flexDirection:'row',marginTop:30}}>
 
   <View style={{width:"50%",flexDirection:'row',alignSelf:'center',alignItems:'center',marginLeft:27}}>
+{/* 
+  <View
+        type="checkbox"
+        checked={checked}
+        onChange={e => setChecked(e.target.checked)}
+      /> */}
              {/* <CheckBox
 
       
