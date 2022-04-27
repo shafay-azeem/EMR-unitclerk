@@ -1,5 +1,5 @@
 import React, {Component, useState,useEffect} from 'react';
-import { Text, View, TouchableOpacity,TextInput, FlatList, Image,SafeAreaView,Modal,Alert}  from 'react-native';
+import { Text, View, TouchableOpacity,TextInput, FlatList, Image,SafeAreaView,Modal,Alert,ActivityIndicator}  from 'react-native';
 import UnitClerkHeader from './AllHeaders/UnitClerkHeader';
 import PatientHeader from './AllHeaders/PatientHeader';
 import Header from './Header';
@@ -20,7 +20,9 @@ import patientDoc from './DATA/patientDoc.json';
 
 function Item({ item }) {
     const navigation = useNavigation();   
-  
+    if (item.empty === true) {
+      return <View style={[styles.item, styles.itemInvisible]} />;
+    }
       return (
 
         <TouchableOpacity style={styles.listItemBox}
@@ -300,8 +302,16 @@ function Item({ item }) {
             </TouchableOpacity>
     </View>
     <AppointmentHeading name="Upcomming Appointments"/>
-  
-             <View style= {{flex:1 , height:"100%",width: '100%'}}>
+    {isLoading ? (
+              <View style={{alignContent:'center', justifyContent: 'center',  alignSelf: 'center', marginTop: 200}}>
+
+             <ActivityIndicator size="large" color="#000000"/>
+             <Text style={{textAlign: 'center', fontSize: 20, fontFamily:" Montserrat-Medium"}}>Loading..</Text>
+
+             </View>
+
+                ) : (
+                   <View style= {{flex:1 , height:"100%",width: '100%'}}>
              <SafeAreaView style={{flex:1}} >
  <FlatList
   
@@ -315,7 +325,7 @@ function Item({ item }) {
 </SafeAreaView> 
 
         </View>
-
+)}
         </View>
      
     );

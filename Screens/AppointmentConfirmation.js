@@ -51,7 +51,7 @@ function Item({ item }) {
         <View style={styles.container}>
         <Header name="Appointment Confirmation"/>
         <UnitClerkHeader/>
-         <PatientHeader/>
+        <PatientHeader firstName={patient.firstName} lastName = {patient.lastName} age={patient.age} phone={patient.primaryContact} mrnum={patient.mrnum}/>
          <View style = {styles.cardView90}>
            
 

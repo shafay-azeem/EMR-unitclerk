@@ -25,8 +25,8 @@ import { useNavigation } from '@react-navigation/native';
           <Header name="Images Or Records" class= ""/>
 
        <UnitClerkHeader/>
-
-       <PatientHeader/>
+{/* 
+       <PatientHeader/> */}
 
 
         <View style={{flexDirection:'row',margin:50, alignSelf:'center'}}>

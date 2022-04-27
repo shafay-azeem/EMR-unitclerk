@@ -1,7 +1,7 @@
 
 
 import React, {Component, useState,useEffect } from 'react';
-import { Text, View, TouchableOpacity,TextInput, FlatList, Image}  from 'react-native';
+import { Text, View, TouchableOpacity,TextInput, FlatList, Image,ActivityIndicator}  from 'react-native';
 import UnitClerkHeader from './AllHeaders/UnitClerkHeader';
 import PatientHeader from './AllHeaders/PatientHeader';
 import Header from './Header';
@@ -146,7 +146,17 @@ axios.all([requestOne]).then(axios.spread((...responses) => {
           
           
             <UnitClerkHeader/>
-            <PatientHeader/>
+            {/* <PatientHeader/> */}
+
+            {isLoading ? (
+              <View style={{alignContent:'center', justifyContent: 'center',  alignSelf: 'center', marginTop: 200}}>
+
+             <ActivityIndicator size="large" color="#000000"/>
+             <Text style={{textAlign: 'center', fontSize: 20, fontFamily:" Montserrat-Medium"}}>Loading..</Text>
+
+             </View>
+
+                ) : (
          <View style= {{flex:1 ,width: '100%', alignSelf: 'center'}}>
          <SafeAreaView style={{flex:1}} >
         <FlatList
@@ -162,7 +172,7 @@ axios.all([requestOne]).then(axios.spread((...responses) => {
   
 
         </View>
-
+)}
         </View>
        
       

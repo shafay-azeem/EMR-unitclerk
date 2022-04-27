@@ -62,7 +62,7 @@ import { FadeFromBottomAndroid } from '@react-navigation/stack/lib/typescript/sr
 
           <Header name="Payment" class= ""/>
           <UnitClerkHeader/>
-            <PatientHeader/>
+          <PatientHeader firstName={patient.firstName} lastName = {patient.lastName} age={patient.age} phone={patient.primaryContact} mrnum={patient.mrnum}/>
       <View style = {styles.cardView90}>
          
         <View style={{width:'100%'}}>

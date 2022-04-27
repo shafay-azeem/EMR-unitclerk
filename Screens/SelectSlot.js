@@ -1,5 +1,5 @@
 import React, {Component, useState,useEffect} from 'react';
-import { Text, View, TouchableOpacity,TextInput, FlatList, Image,SafeAreaView}  from 'react-native';
+import { Text, View, TouchableOpacity,TextInput, FlatList, Image,SafeAreaView,ActivityIndicator}  from 'react-native';
 import UnitClerkHeader from './AllHeaders/UnitClerkHeader';
 import PatientHeader from './AllHeaders/PatientHeader';
 import Header from './Header';
@@ -153,7 +153,7 @@ axios.all([requestOne]).then(axios.spread((...responses) => {
           
            
             <UnitClerkHeader/>
-            <PatientHeader/>
+            <PatientHeader firstName={patient.firstName} lastName = {patient.lastName} age={patient.age} phone={patient.primaryContact} mrnum={patient.mrnum}/>
          <View style = {{flexDirection: 'row', alignItems:'center', justifyContent:'center' }}>
              <View style={{alignSelf: 'center',height: 120, width: 150,borderRadius: 150/2,justifyContent: 'center', }}>
              <Image
@@ -166,6 +166,15 @@ axios.all([requestOne]).then(axios.spread((...responses) => {
              <Text style= {[styles.cardText, {alignSelf: 'flex-start'}]}>{doctorInfo.speciality}</Text> 
              </View>
              </View>
+             {isLoading ? (
+              <View style={{alignContent:'center', justifyContent: 'center',  alignSelf: 'center', marginTop: 200}}>
+
+             <ActivityIndicator size="large" color="#000000"/>
+             <Text style={{textAlign: 'center', fontSize: 20, fontFamily:" Montserrat-Medium"}}>Loading..</Text>
+
+             </View>
+
+                ) : (
              <View style= {{flex:1 , height:"100%",width: '100%', alignSelf: 'center'}}>
              <SafeAreaView style={{flex:1}} >
         <FlatList
@@ -180,7 +189,7 @@ axios.all([requestOne]).then(axios.spread((...responses) => {
 </SafeAreaView>
 
         </View>
-
+                )}
         </View>
      
     );

@@ -1,5 +1,5 @@
 import React, {Component, useState,useEffect } from 'react';
-import { Text, View, TouchableOpacity,TextInput, FlatList, Image,Alert}  from 'react-native';
+import { Text, View, TouchableOpacity,TextInput, FlatList, Image,Alert,ActivityIndicator}  from 'react-native';
 import UnitClerkHeader from './AllHeaders/UnitClerkHeader';
 import PatientHeader from './AllHeaders/PatientHeader';
 import Header from './Header';
@@ -180,10 +180,20 @@ function Item({ item }) {
           
       
             <UnitClerkHeader/>
-            <PatientHeader/>
+            {/* <PatientHeader/> */}
+            {isLoading ? (
+              <View style={{alignContent:'center', justifyContent: 'center',  alignSelf: 'center', marginTop: 200}}>
+
+             <ActivityIndicator size="large" color="#000000"/>
+             <Text style={{textAlign: 'center', fontSize: 20, fontFamily:" Montserrat-Medium"}}>Loading..</Text>
+
+             </View>
+
+                ) : (
+
          <View style= {{flex:1 ,width: '100%', alignSelf: 'center'}}>
          <SafeAreaView style={{flex:1}} >
-         
+
         <FlatList
   
           style={{flex:1, marginTop: 30, marginRight:30,marginLeft:30}}
@@ -198,6 +208,7 @@ function Item({ item }) {
   
 
         </View> 
+)}
         </View>
        
       

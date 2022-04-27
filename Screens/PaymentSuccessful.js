@@ -25,11 +25,11 @@ import { useNavigation } from '@react-navigation/native';
       <View style={styles.container}>
           <Header name="Payment Successfully Done" class= ""/>
           <UnitClerkHeader/>
-            <PatientHeader/>
+          <PatientHeader firstName={patient.firstName} lastName = {patient.lastName} age={patient.age} phone={patient.primaryContact} mrnum={patient.mrnum}/>
       <View style = {styles.cardView91}>
          
         <View style={{width:'100%'}}>
-        <View style={{backgroundColor:'#FFFFFF',padding:20,height:'20%',marginBottom:40}} >
+        <View style={{backgroundColor:'#FFFFFF',padding:20,height:'20%',marginBottom:20}} >
             <View style= {{flexDirection: "row",justifyContent:'center',padding:10}}>
    
           
@@ -58,7 +58,7 @@ import { useNavigation } from '@react-navigation/native';
           
             <View style = {{flexDirection: 'column',alignItems: 'center',marginRight:10}}>
             <Text style={{ color: 'black',alignSelf: 'flex-start',fontSize:20, fontFamily:"Montserrat-Regular"}}>Fee</Text>
-            <Text style={{color: 'black', alignSelf: 'flex-start',fontSize:18,color:'#3FB39B',marginRight:20,fontFamily:"Montserrat-Regular"}}>{doctorInfo.initialFees}</Text>
+            <Text style={{color: 'black', alignSelf: 'flex-start',fontSize:18,color:'#3FB39B',marginRight:20,fontFamily:"Montserrat-Regular"}}>{doctorInfo.initialFees} Rs</Text>
        
             </View>
             <View style = {{flexDirection: 'column',alignItems: 'center',marginRight:10}}>
@@ -96,7 +96,7 @@ import { useNavigation } from '@react-navigation/native';
 
                 <View style = {{flexDirection: 'row'}}>
                 <Text style = {[{marginTop:10,fontSize:15,color:'black',fontFamily:"Montserrat-Regular"}]}>Invoice Date/Time: </Text>
-                <Text style = {[{marginTop:7,fontSize:20,color:'#3FB39B',fontFamily:"Montserrat-SemiBold"}]}>{slotDetails.date}{" - "}{}</Text>
+                <Text style = {[{marginTop:7,fontSize:20,color:'#3FB39B',fontFamily:"Montserrat-SemiBold"}]}>{slotDetails.date}{" - "}{slotDetails.startTime}</Text>
                 </View>
 
 
@@ -163,7 +163,7 @@ import { useNavigation } from '@react-navigation/native';
 
                 </View>
 
-                <TouchableOpacity style={[styles.buttonGeneral,{marginBottom:500,width:"28%"}]}
+                <TouchableOpacity style={[styles.buttonGeneral,{marginBottom:1000,width:"28%"}]}
               onPress={() =>navigation.navigate("SignInScreen")}
               > 
               <Text style={styles.Button_text_styling}>

@@ -25,10 +25,10 @@ import { useNavigation } from '@react-navigation/native';
           <View>
           <Header name="Images Or Records" class= ""/>
        <UnitClerkHeader/>
-       <PatientHeader/>
+       {/* <PatientHeader/> */}
 
  
-        <View style={{flexDirection:'row',marginTop:30,marginRight:50,marginLeft:50, alignSelf:'center'}}>
+        <View style={{flexDirection:'row',marginTop:80,marginRight:50,marginLeft:50, alignSelf:'center'}}>
             <TouchableOpacity  onPress={() =>navigation.navigate("MoreImagesAndRecord")}>
              <View style={{height:200,width:240,backgroundColor:'#FFFFFF', marginRight:30 ,borderRadius:10,}}> 
              <View style={{ width: 100 ,height:100,marginTop:50,marginBottom:50,alignSelf:'center'}}>
