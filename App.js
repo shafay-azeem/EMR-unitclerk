@@ -26,7 +26,7 @@ import Cash from "./Screens/Cash";
 import AppointmentConfirmation from "./Screens/AppointmentConfirmation";
 import SelectSchedule from "./Screens/SelectSchedule";
 import Payment from "./Screens/Payment";
-import selectDocbooking from "./Screens/selectDocbooking";
+import SelectDocbooking from "./Screens/SelectDocbooking";
 
 import modal from "./Screens/modal";
 
@@ -177,8 +177,8 @@ const App = () => {
 
 
 <Stack.Screen
-        name="selectDocbooking"
-        component={selectDocbooking}
+        name="SelectDocbooking"
+        component={SelectDocbooking}
       />
       
 <Stack.Screen

@@ -1,5 +1,5 @@
-import {SafeAreaView,ScrollView, Text,StatusBar, View, TouchableOpacity,TextInput,Alert} from 'react-native';
-import React, {Component,Fragment,useEffect,useState,Image} from 'react';
+import {SafeAreaView,ScrollView, Text,StatusBar, View, TouchableOpacity,TextInput,Alert,Image} from 'react-native';
+import React, {Component,Fragment,useEffect,useState} from 'react';
 import { Picker } from "@react-native-picker/picker";
 import { openDatabase } from 'react-native-sqlite-storage';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -8,7 +8,7 @@ import Example from './Example';
 import { useNavigation } from '@react-navigation/native';
 import styles from './Styles/CompleteStyling';
 
-
+import axios from 'axios';
 import Header from './Header';
 import UnitClerkHeader from './AllHeaders/UnitClerkHeader';
 
@@ -17,26 +17,9 @@ var db = openDatabase({ name: 'patient.db' });
 const RegistrationScreen = ({ navigation }) => {
         
   
-  useEffect(() => {
-    db.transaction(function (txn) {
-      txn.executeSql(
-        "SELECT name FROM sqlite_master WHERE type='table' AND name='Pr'",
-        [],
-        function (tx, res) {
-          console.log('item:', res.rows.length);
-          if (res.rows.length == 0) {
-            txn.executeSql('DROP TABLE IF EXISTS Pr', []);
-            txn.executeSql(
-              'CREATE TABLE IF NOT EXISTS Pr(user_id INTEGER PRIMARY KEY AUTOINCREMENT, CNIC_Number VARCHAR(30) FOREIGN KEY,FirstName VARCHAR(30),MiddleName VARCHAR(30),LastName VARCHAR(30),Phone_Number VARCHAR(30),Alternate_phone_Number VARCHAR(30),Email VARCHAR(30),HomeAddress VARCHAR(30),Age VARCHAR(30),CityTown VARCHAR(30),Province VARCHAR(30),MaritalStatus VARCHAR(30) , Visit VARCHAR(30),date VARCHAR(30))',
-              []
-            );
-          }
-        }
-      );
-    });
-  }, []);
 
-
+  let [MRNumber, setMRNumber] = useState('');
+  
     let [CNIC_Number, setCNIC_Number] = useState('');
     let [FirstName, setFirstName] = useState('');
     let [MiddleName, setMiddleName] = useState('');
@@ -51,8 +34,8 @@ const RegistrationScreen = ({ navigation }) => {
     let [Visit, setVisit] = useState('ClinicalVisit');
     let [MaritalStatus, setMaritalStatus] = useState('Unmarried');
     let [checked, setChecked] = useState(false);
-
-   
+    
+    let [Qrcode, setQrcode] = useState('');
     let [date, setDate] = useState('');
     let [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   
@@ -78,12 +61,27 @@ const RegistrationScreen = ({ navigation }) => {
    
    
     let register_user = () => {
+      if (!MRNumber) {
+        alert('Please fill MRNumber');
+        return;
+      }
+      if (MRNumber.trim().length < 7 ||MRNumber.trim().length > 7 ) {
+        alert('MRNumber must be of 7 characters');
+         return;
+        }
 
+      let regMR=/^[MR]{2}[0-9]{5}$/;
+      if (regMR.test(MRNumber.toString())){
+      }
+      else{
+        alert('Enter Mr Number Acc to Our Hints');
+        return;
+      }
     
 
 
       if (!CNIC_Number) {
-        alert('Please fill CNIC_Number');
+        alert('Please fill CNIC Number');
         return;
       }
 
@@ -96,7 +94,7 @@ const RegistrationScreen = ({ navigation }) => {
        if (regCnic.test(CNIC_Number.toString())){
        }
        else{
-         alert('CNIC must include dashes');
+         alert('Enter CNIC acc to hint');
          return;
        }
   
@@ -114,7 +112,7 @@ const RegistrationScreen = ({ navigation }) => {
       if (regname.test(FirstName.toString())){
       }
       else{
-        alert('First Name should include only Alphabets');
+        alert('Name Should not Include Special characters');
         return;
       }
 
@@ -129,7 +127,7 @@ const RegistrationScreen = ({ navigation }) => {
        if (regname.test(MiddleName.toString())){
       }
       else{
-        alert('Middle Name should include only Alphabets');
+        alert('Name Should not Include Special characters');
         return;
       }
       if (!LastName) {
@@ -144,7 +142,7 @@ const RegistrationScreen = ({ navigation }) => {
        if (regname.test(LastName.toString())){
        }
       else{
-        alert('Last Name should include only Alphabets');
+        alert('Name Should not Include Special characters');
         return;
       }
       if (!Phone_Number) {
@@ -153,7 +151,7 @@ const RegistrationScreen = ({ navigation }) => {
       }
 
       if (Phone_Number.trim().length < 12 ||Phone_Number.trim().length > 12 ) {
-        alert('Phone Number must be of 11 digit');
+        alert('Enter Phone Number acc to hint');
          return;
        }
          
@@ -171,7 +169,7 @@ const RegistrationScreen = ({ navigation }) => {
         return;
       }
       if (Alternate_phone_Number.trim().length < 12 ||Alternate_phone_Number.trim().length > 12) {
-        alert('Alternate_phone_Number must be of 11 digit');
+        alert('Enter Phone Number acc to hint');
          return;
        }
        if (regNum.test(Phone_Number.toString())){
@@ -182,7 +180,7 @@ const RegistrationScreen = ({ navigation }) => {
         return;
       }
       if(Phone_Number==Alternate_phone_Number){
-        alert('Please enter Different Numbers');
+        alert('Please enter Different Phone Numbers');
         return;
       }
       if (!Email) {
@@ -192,14 +190,14 @@ const RegistrationScreen = ({ navigation }) => {
 
       let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
       if (reg.test(Email) === false) {
-      alert('enter valid email address');
+      alert('Enter valid email address');
       return;
       }
   
 
     
       if (!Age) {
-        alert('Please fill Address');
+        alert('Please fill Age');
         return;
       }
 
@@ -220,34 +218,100 @@ const RegistrationScreen = ({ navigation }) => {
         alert('Please fill Province');
         return;
       }
-     
-      db.transaction(function (tx) {
-        console.log(CNIC_Number, FirstName,MiddleName,LastName,Phone_Number,Alternate_phone_Number,HomeAddress,Email,Age,CityTown,Province,MaritalStatus,Visit,date);
-        tx.executeSql(
-          
-          'INSERT INTO Pr (CNIC_Number, FirstName,MiddleName,LastName,Phone_Number,Alternate_phone_Number,HomeAddress,Email,Age,CityTown,Province,MaritalStatus,Visit,date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
-          [CNIC_Number,FirstName,MiddleName,LastName,Phone_Number,Alternate_phone_Number,HomeAddress,Email,Age,CityTown,Province,MaritalStatus,Visit,date.toString()],
-        
-          (tx, results) => {
-            console.log('Results', results.rowsAffected);
-          
-            if (results.rowsAffected > 0) {
-              Alert.alert(
-                'Success',
-                'You are Registered Successfully',
-                [
-                  {
-                    text: 'Ok',
-                    onPress: () => navigation.navigate('SelectPatient'),
-                  },
-                ],
-                { cancelable: false }
-              );
-            } else alert('Registration Failed');
-          }
-        );
+    
+
+      const data = 
+        {
+          "addresses": [
+              {
+                  "address1": "AKUH stadium Rd",
+                  "cityVillage": "Karachi",
+                  "country": "Sindh"
+              }
+          ],
+          "age": "22",
+          "attributes": [
+              {
+                  "attributeType": "alternate-contact-patient",
+                  "value":Alternate_phone_Number
+              },
+              {
+                  "attributeType": "cnic-patient",
+                  "value": CNIC_Number
+              },
+              {
+                  "attributeType": "email-patient",
+                  "value": Email
+              },
+              {
+                  "attributeType": "family-number-patient",
+                  "value": "090909"
+              },
+              {
+                  "attributeType": "mrnum-patient",
+                  "value": MRNumber
+              },
+              {
+                  "attributeType": "primary-contact-patient",
+                  "value": Phone_Number
+              },
+              {
+                  "attributeType": "qrcode-patient",
+                  "value": Qrcode
+              },
+              {
+                  "attributeType": "sehat-safar-number-patient",
+                  "value": "0909989"
+              },
+              {
+                  "attributeType": "types-of-visits-patient",
+                  "value": "others"
+              }
+          ],
+          "birthdate": "1997-09-02T00:00:00.000+0000",
+          "gender": "F",
+          "names": [
+              {
+                  "familyName": LastName,
+                  "givenName": FirstName,
+                  "middleName": MiddleName
+              }
+          ],
+          "uuid": MRNumber
+      }
+      fetch('http://emr.daldaeagleseye.com/emrappointment/patient', {
+        method: 'POST', // or 'PUT'
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Success:', data);
+        if (MRNumber!=null) {
+          Alert.alert(
+            'Success',
+            'Added Successfully',
+            [
+              {
+                text: 'Ok',
+                onPress: () => navigation.navigate('HomeScreen'),
+              },
+            ],
+            { cancelable: false }
+          );
+        } else alert('Failed');
+      })
+      .catch((error) => {
+        console.error('Error:', error);
       });
+  
+      
     };
+  
+  
+  
   
 
 
@@ -271,12 +335,11 @@ const RegistrationScreen = ({ navigation }) => {
         <View style={styles.inputWrap}>
           <Text style={styles.EdittextHeading}>MR Number</Text>
           <TextInput style={styles.Edittext}
-          placeholder="Auto Generate" 
-          keyboardType = 'numeric'
-          editable={false} 
-          selectTextOnFocus={false}
+          placeholder="MRXXXXX" 
+          maxLength={7}
           placeholderTextColor="#30A28C"
-           onChangeText={text => this.setState({MRNumber:text})}/>
+          onChangeText={(MRNumber) => setMRNumber(MRNumber)}
+              />
         </View>
 
         <View style={styles.inputWrap}>
@@ -303,7 +366,7 @@ const RegistrationScreen = ({ navigation }) => {
               placeholderTextColor="#30A28C"
               editable={false} 
               selectTextOnFocus={false}
-              placeholder="Enter Sehat Safar Number" 
+              placeholder="Not for Patient" 
               // onChangeText={(userName) => setCNIC_Number(userName)}
               />
                </View>
@@ -466,12 +529,12 @@ const RegistrationScreen = ({ navigation }) => {
 
 
 
-            <Text style={styles.EdittextHeading}>Home Address</Text>
+            <Text style={styles.EdittextHeading}>Qr-code</Text>
             <TextInput  
               style={styles.Edittext}
-              placeholder="Home Address" 
+              placeholder="Qr-code" 
               placeholderTextColor="#30A28C"
-              onChangeText={ (HomeAddress) => setHomeAddress(HomeAddress)}/>
+              onChangeText={ (Qrcode) => setQrcode(Qrcode)}/>
 
 
               

@@ -9,17 +9,17 @@ import { useNavigation } from '@react-navigation/native';
 import UnitClerkHeader from './AllHeaders/UnitClerkHeader';
 import PatientHeader from './AllHeaders/PatientHeader';
 
-const SearchDoctor = () => {
+const SearchDoctor = ({route}) => {
   
   const navigation = useNavigation();
-
+  const { patient } = route.params;
 
   let [AFMC, setAFMC] = useState('');
-    
+  let [specality, setSpeaciality] = useState('Cardiologist');
   let [Family_Medicine, setFamily_Medicine] = useState('');
-  let [doc, setdoc] = useState('');
-    
-  let [Phone_Number, setPhone_Number] = useState('');
+  let [specifyDoctor, setSpecifyDoctor] = useState('');
+  let [phone, setPhone] = useState('');
+  let [mrNumber, setMrNumber] = useState('');
     return (
     
       <SafeAreaView style={[styles.container,{flex: 1}]}>
@@ -79,7 +79,7 @@ const SearchDoctor = () => {
               style={styles.Edittext}
               placeholder="Specify Name of Desired Doctor" 
               placeholderTextColor="#30A28C"
-              onChangeText={ (doc)=> setdoc(doc)}/>  
+              onChangeText={ (specifyDoctor)=> setSpecifyDoctor(specifyDoctor)}/>  
 
 
                          
@@ -89,10 +89,15 @@ const SearchDoctor = () => {
               placeholder="Search by Phone Number" 
               placeholderTextColor="#30A28C"
               keyboardType = 'numeric'
-              onChangeText={ (Phone_Number)=> setPhone_Number(Phone_Number)}/>  
-         
+              onChangeText={ (phone)=> setPhone(phone)}/>  
+        
              <TouchableOpacity style={styles.buttonForSearchPatient}
-             onPress={() =>navigation.navigate("SelectDoc")}
+             onPress={() =>navigation.navigate('SelectDoc', {
+              specality: specality,
+              specifyDoctor: specifyDoctor,
+              patient: patient
+
+            })}
              > 
              <Text style={styles.Button_text_styling}>
              SEARCH </Text>

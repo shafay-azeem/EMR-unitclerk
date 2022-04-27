@@ -14,8 +14,7 @@ const PatientHeader = () => {
   const [mrnum, setmrnum] = useState([]);
   const [primaryContact, setprimaryContact] = useState([]);
   const [gender, setgender] = useState([]);
-  const [status, setStatus] = useState("");
-
+  // const [status, setStatus] = useState('false');
 
   // similar to 'componentDidMount', gets called once
   useEffect(() => {

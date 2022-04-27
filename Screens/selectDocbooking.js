@@ -13,12 +13,15 @@ import { useNavigation } from '@react-navigation/native';
 import doctors from './DATA/selectdoc.json';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
+import axios from 'axios';
 
 
 function Item({ item }) {
     const navigation = useNavigation();   
-  
+
+    if (item.empty === true) {
+      return <View style={[styles.item, styles.itemInvisible]} />;
+    }
       return (
         
 
@@ -49,11 +52,11 @@ function Item({ item }) {
 
           </View>
 
-            <Text numberOfLines={1} style={{ textAlign: 'left', fontSize: 25, color:"#075430", textAlign: 'center',fontFamily:"Montserrat-Regular"}}>Dr. {item.name}</Text>
+            <Text numberOfLines={1} style={{ textAlign: 'left', fontSize: 25, color:"#075430", textAlign: 'center',fontFamily:"Montserrat-Regular"}}>Dr. {item.providerId}</Text>
 
             
             <View style = {{padding: 5, width: '100%', height: '100%'}}>
-            <Text numberOfLines={1} style={{ textAlign: 'center', fontSize: 17,  color: 'grey',fontFamily:"Montserrat-Regular"}}>{item.profession}</Text>
+            <Text numberOfLines={1} style={{ textAlign: 'center', fontSize: 17,  color: 'grey',fontFamily:"Montserrat-Regular"}}>{item.speciality}</Text>
             
         
         <View style= {{flex: 1,justifyContent: 'flex-end', marginBottom: 80 }}> 
@@ -80,26 +83,61 @@ function Item({ item }) {
 
 
 
-  const selectDocbooking = () => {
+  const SelectDocbooking = () => {
   
-  doctorName = "Dr Ahmed Khan";
-  specality = "MBBS";
- 
- let  numColumns = 4;
-  const formatData = (data, numColumns) => {
-   const numberOfFullRows = Math.floor(data.length / numColumns);
+    const numColumns = 4;
 
-     let numberOfElementsLastRow = 8 - (numberOfFullRows * numColumns);
-     while (numberOfElementsLastRow !== numColumns && numberOfElementsLastRow !== 0) {
-       data.push({ key: `blank-${numberOfElementsLastRow}`, empty: true });
-       numberOfElementsLastRow++;
-      
-     }
-     return data;
-   };
+    const formatData = (data, numColumns) => {
+      const numberOfFullRows = Math.floor(data.length / numColumns);
+    
+      let numberOfElementsLastRow = data.length - (numberOfFullRows * numColumns);
+      while (numberOfElementsLastRow !== numColumns && numberOfElementsLastRow !== 0) {
+        data.push({ key: `blank-${numberOfElementsLastRow}`, empty: true });
+        numberOfElementsLastRow++;
+      }
+    
+      return data;
+    };
+
+
+
+    
+    const [isLoading, setLoading] = useState(true);
+    const [doctorbook, setdoctorbook] = useState([]);
+    // const { name } = route.params;
+
+    // console.log(name)
+
+    useEffect(() => {
+
+// console.log(name)
+let one = "https://emr-system.000webhostapp.com/emrappointment/emrappointment/appointment/provider/search?speciality=Cardiologist&name="
+const requestOne = axios.get(one);
+
+ 
+axios.all([requestOne]).then(axios.spread((...responses) => {
+  const responseOne = responses[0]
+  console.warn(responseOne.data)
+ 
+
+
+        
+        const data1 = formatData(responseOne.data.result, 4);
+
+        console.log("data1", data1)
+        setdoctorbook(data1);
+        // console.log(doctor.result[0].providerId);
+        console.log(doctor);
+        // console.log(name)
+
+      })).catch(errors => {
+        console.log(errors)
   
- 
-
+    }).then(() => setLoading(false))
+  
+  
+  }, []);
+  
 
     return (
     
@@ -114,7 +152,7 @@ function Item({ item }) {
         <FlatList
   
           style={{flex:1, marginTop: 30, marginRight:30,marginLeft:30}}
-          data={ formatData(doctors,numColumns)}
+          data={doctorbook}
           renderItem={({ item }) => <Item item={item}/>}
           keyExtractor={item => item.email}
           numColumns = {numColumns}
@@ -132,4 +170,4 @@ function Item({ item }) {
     );
   }
 
-  export default selectDocbooking;
+  export default SelectDocbooking;

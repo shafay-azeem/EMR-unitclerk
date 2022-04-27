@@ -19,7 +19,7 @@ function Item({ item }) {
           <SafeAreaView>
         <View style={styles.listItem}>
             <View style={{width: '100%', height: '100%'}}>
-            <Text style={{ textAlign: 'center',fontFamily:"Montserrat-Regular"}}>{item.date1}</Text>
+            <Text style={{ textAlign: 'center',fontFamily:"Montserrat-Regular"}}>{item.date}</Text>
             <Text style={{ textAlign: 'center',fontFamily:"Montserrat-Regular"}}>{item.slot}</Text>
 
 
@@ -34,12 +34,22 @@ function Item({ item }) {
 
 
 
-  const AppointmentDetails = () => {
+  const AppointmentDetails = ({route}) => {
     const navigation = useNavigation();  
-
  
-    let doctorName = "Dr Ahmed Khan";
-    let specality = "Family Medicine";
+    const  doctorName = "Dr Ahmed Khan";
+    const  specality = "Family Medicine";    
+    const AppointmentDate = 'Monday, 06 December 2021';
+    const AppointmentTime = '1:00pm - 1:30pm'
+   
+    const {patient} = route.params;
+    const {schedule} = route.params;
+   
+    
+   
+    const { slotDetails } = route.params;
+    const { doctorInfo } = route.params;
+   
 
     return (
         <View style={styles.container}>
@@ -61,14 +71,14 @@ function Item({ item }) {
             />             
             </View>
             <View>
-             <Text style= {styles.cardText30}>{doctorName}</Text>
-             <Text style= {[styles.cardText, {alignSelf: 'flex-start',color:"black"}]}>{specality}</Text>
+             <Text style= {styles.cardText30}>{doctorInfo.fullName}</Text>
+             <Text style= {[styles.cardText, {alignSelf: 'flex-start',color:"black"}]}>{doctorInfo.speciality}</Text>
              </View>
              </View>
             
              <View style = {[styles.subCardView,{height:"60%",width:"65%"}]}>
-               <Text style = {[styles.centeredText,{color:"#3FB39B",fontSize:25}]}>{doctorApp[0].date1}</Text>
-               <Text style = {[styles.centeredText,{color:"#3FB39B",marginBottom:40,justifyContent:'flex-start',textAlign:'left',marginRight:160}]}>{doctorApp[0].slot}</Text>
+               <Text style = {[styles.centeredText,{color:"#3FB39B",fontSize:25,justifyContent:'flex-start',textAlign:'left',marginRight:135}]}>{slotDetails.dayname}{", "}{slotDetails.date}</Text>
+               <Text style = {[styles.centeredText,{color:"#3FB39B",marginBottom:40,justifyContent:'flex-start',textAlign:'left',marginRight:160}]}>{slotDetails.startTime}{" - "}{slotDetails.endTime}</Text>
 
 
                
@@ -90,7 +100,11 @@ function Item({ item }) {
        width:250,
        marginTop:10,
        marginRight:60,marginLeft:20,marginBottom:20}}
-              onPress={() =>navigation.navigate("Payment")}
+              onPress={() =>navigation.navigate("Payment", {
+                doctorInfo: doctorInfo,
+                slotDetails: slotDetails,
+                patient: patient,
+              })}
               > 
               <Text style={{  fontSize:15,
    color:'black',

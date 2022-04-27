@@ -13,9 +13,11 @@ import { Picker } from "@react-native-picker/picker";
 import { useNavigation } from '@react-navigation/native';
 
  
-  const PaymentSuccessfull = () => {
+  const PaymentSuccessfull = ({route}) => {
 
-
+    const { slotDetails } = route.params;
+    const { doctorInfo } = route.params;
+    const { patient } = route.params;
 
   const navigation = useNavigation();  
 
@@ -45,28 +47,28 @@ import { useNavigation } from '@react-navigation/native';
 
             <View style = {{flexDirection: 'column' ,alignItems: 'center',marginRight:10}}>
             <Text style={{ color: 'black',alignSelf: 'flex-start',fontSize:20, fontFamily:"Montserrat-Regular"}}>Doctor Name </Text>
-            <Text style={{color: 'black', alignSelf: 'flex-start',fontSize:18,color:'#3FB39B',marginRight:20,fontFamily:"Montserrat-Regular"}}>{drinfo.doctorName}</Text>
+            <Text style={{color: 'black', alignSelf: 'flex-start',fontSize:18,color:'#3FB39B',marginRight:20,fontFamily:"Montserrat-Regular"}}>{doctorInfo.firstName}</Text>
        
             </View>
             <View style = {{flexDirection: 'column' ,alignItems: 'center',marginRight:10}}>
             <Text style={{ color: 'black',alignSelf: 'flex-start',fontSize:20, fontFamily:"Montserrat-Regular"}}>Speciality </Text>
-            <Text style={{color: 'black', alignSelf: 'flex-start',fontSize:18,color:'#3FB39B',marginRight:20,fontFamily:"Montserrat-Regular"}}>{drinfo.specality}</Text>
+            <Text style={{color: 'black', alignSelf: 'flex-start',fontSize:18,color:'#3FB39B',marginRight:20,fontFamily:"Montserrat-Regular"}}>{doctorInfo.speciality}</Text>
        
             </View>
           
             <View style = {{flexDirection: 'column',alignItems: 'center',marginRight:10}}>
             <Text style={{ color: 'black',alignSelf: 'flex-start',fontSize:20, fontFamily:"Montserrat-Regular"}}>Fee</Text>
-            <Text style={{color: 'black', alignSelf: 'flex-start',fontSize:18,color:'#3FB39B',marginRight:20,fontFamily:"Montserrat-Regular"}}>{drinfo.Fees}</Text>
+            <Text style={{color: 'black', alignSelf: 'flex-start',fontSize:18,color:'#3FB39B',marginRight:20,fontFamily:"Montserrat-Regular"}}>{doctorInfo.initialFees}</Text>
        
             </View>
             <View style = {{flexDirection: 'column',alignItems: 'center',marginRight:10}}>
             <Text style={{ color: 'black',alignSelf: 'flex-start',fontSize:20, fontFamily:"Montserrat-Regular"}}>PhoneNo</Text>
-            <Text style={{color: 'black', alignSelf: 'flex-start',fontSize:18,color:'#3FB39B',marginRight:20,fontFamily:"Montserrat-Regular"}}>{drinfo.doctorPhone}</Text>
+            <Text style={{color: 'black', alignSelf: 'flex-start',fontSize:18,color:'#3FB39B',marginRight:20,fontFamily:"Montserrat-Regular"}}>{doctorInfo.phoneNum}</Text>
        
             </View>
             <View style = {{flexDirection: 'column',alignItems: 'center',marginRight:10}}>
             <Text style={{ color: 'black',alignSelf: 'flex-start',fontSize:20 , fontFamily:"Montserrat-Regular"}}>Location</Text>
-            <Text style={{color: 'black', alignSelf: 'flex-start',fontSize:18,color:'#3FB39B',marginRight:20,fontFamily:"Montserrat-Regular"}}>{drinfo.Location}</Text>
+            <Text style={{color: 'black', alignSelf: 'flex-start',fontSize:18,color:'#3FB39B',marginRight:20,fontFamily:"Montserrat-Regular"}}>{invoice['IssuedBy '] }</Text>
        
             </View>
         
@@ -94,37 +96,37 @@ import { useNavigation } from '@react-navigation/native';
 
                 <View style = {{flexDirection: 'row'}}>
                 <Text style = {[{marginTop:10,fontSize:15,color:'black',fontFamily:"Montserrat-Regular"}]}>Invoice Date/Time: </Text>
-                <Text style = {[{marginTop:7,fontSize:20,color:'#3FB39B',fontFamily:"Montserrat-SemiBold"}]}>{invoice['InvoiceDate'] }</Text>
+                <Text style = {[{marginTop:7,fontSize:20,color:'#3FB39B',fontFamily:"Montserrat-SemiBold"}]}>{slotDetails.date}{" - "}{}</Text>
                 </View>
 
 
                 <View style = {{flexDirection: 'row'}}>
                 <Text style = {[{marginTop:10,fontSize:15,color:'black',fontFamily:"Montserrat-Regular"}]}>Patient ID: </Text>
-                <Text style = {[{marginTop:7,fontSize:20,color:'#3FB39B',fontFamily:"Montserrat-SemiBold"}]}>{invoice.PatientId }</Text>
+                <Text style = {[{marginTop:7,fontSize:20,color:'#3FB39B',fontFamily:"Montserrat-SemiBold"}]}>{patient.patientId}</Text>
 
                 </View>
 
                 <View style = {{flexDirection: 'row'}}>
                 <Text style = {[{marginTop:10,fontSize:15,color:'black',fontFamily:"Montserrat-Regular"}]}>Patient Name: </Text>
-                <Text style = {[{marginTop:7,fontSize:20,color:'#3FB39B',fontFamily:"Montserrat-SemiBold"}]}>{invoice.patientName }</Text>
+                <Text style = {[{marginTop:7,fontSize:20,color:'#3FB39B',fontFamily:"Montserrat-SemiBold"}]}>{patient.firstName}{""}{patient.lastName}</Text>
 
                 </View>
                 
                 <View style = {{flexDirection: 'row'}}>
                 <Text style = {[{marginTop:10,fontSize:15,color:'black',fontFamily:"Montserrat-Regular"}]}>Appointment Date: </Text>
-                <Text style = {[{marginTop:7,fontSize:20,color:'#3FB39B',fontFamily:"Montserrat-SemiBold"}]}>{invoice.AppointmentDate }</Text>
+                <Text style = {[{marginTop:7,fontSize:20,color:'#3FB39B',fontFamily:"Montserrat-SemiBold"}]}>{slotDetails.date} </Text>
 
                 </View>
 
                 <View style = {{flexDirection: 'row'}}>
                 <Text style = {[{marginTop:10,fontSize:15,color:'black',fontFamily:"Montserrat-Regular"}]}>Appointment Time: </Text>
-                <Text style = {[{marginTop:7,fontSize:20,color:'#3FB39B',fontFamily:"Montserrat-SemiBold"}]}>{invoice.AppointmentTime }</Text>
+                <Text style = {[{marginTop:7,fontSize:20,color:'#3FB39B',fontFamily:"Montserrat-SemiBold"}]}>{slotDetails.startTime }</Text>
 
                 </View>
 
                 <View style = {{flexDirection: 'row'}}>
                 <Text style = {[{marginTop:10,fontSize:15,color:'black',fontFamily:"Montserrat-Regular"}]}>Teleconsultation Payment: </Text>
-                <Text style = {[{marginTop:7,fontSize:20,color:'#3FB39B',fontFamily:"Montserrat-SemiBold"}]}>{invoice.TeleconsultationPayment }</Text>
+                <Text style = {[{marginTop:7,fontSize:20,color:'#3FB39B',fontFamily:"Montserrat-SemiBold"}]}>{doctorInfo.initialFees}</Text>
 
                 </View>
                 
@@ -162,7 +164,7 @@ import { useNavigation } from '@react-navigation/native';
                 </View>
 
                 <TouchableOpacity style={[styles.buttonGeneral,{marginBottom:500,width:"28%"}]}
-              onPress={() =>navigation.navigate("Receipt")}
+              onPress={() =>navigation.navigate("SignInScreen")}
               > 
               <Text style={styles.Button_text_styling}>
               PRINTED INVOICE</Text>

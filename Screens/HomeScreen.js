@@ -4,7 +4,7 @@ import UnitClerkHeader from './AllHeaders/UnitClerkHeader';
 import PatientHeader from './AllHeaders/PatientHeader';
 import Header from './Header';
 import Balance from './Balance';
-
+import axios from 'axios';
 import AppointmentHeading from './AllHeaders/AppointmentHeading';
 import styles from './Styles/CompleteStyling';
 // import GradientButton from 'react-native-gradient-buttons';
@@ -16,6 +16,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import drinfo from './DATA/data.json';
 import Patientinfo from './DATA/patient.json';
 import patientDoc from './DATA/patientDoc.json';
+
 
 function Item({ item }) {
     const navigation = useNavigation();   
@@ -42,7 +43,8 @@ function Item({ item }) {
                     
                     <View style = {{flexDirection: 'row', alignItems: 'center',justifyContent: 'center',alignSelf:'center'}}>
                     <Text style={{ lineHeight: 20,color: 'black',alignSelf: 'flex-start',fontFamily:"Montserrat-Regular"}}>Dr.Name:{'\n'}Specality:</Text>
-                    <Text style={{color:"#30A28C",lineHeight: 20, alignSelf: 'flex-start',fontFamily:"Montserrat-SemiBold"}}>{item.doctorName}{'\n'}{item.specality}</Text>
+                    <Text
+                      style={{color:"#30A28C",lineHeight: 20, alignSelf: 'flex-start',fontFamily:"Montserrat-SemiBold"}}>{item.providerName}{'\n'}{item.providerSpeciality}</Text>
                     </View>
                     </View> 
                     <View style={{borderColor:"#3FB39B",borderWidth:1,margin:5}}></View>
@@ -62,7 +64,7 @@ function Item({ item }) {
                     
                     <View style = {{flexDirection: 'row',  alignItems: 'center',justifyContent: 'center',marginTop:25}}>
                     <Text style={{ lineHeight: 20,color: 'black',alignSelf: 'flex-start',fontFamily:"Montserrat-Regular"}}>Patient: {"\n"}Date: </Text>
-                      <Text style={{color:"#30A28C",lineHeight: 20, alignSelf: 'flex-start',fontFamily:"Montserrat-SemiBold"}}>{item.PatientName}{'\n'}{item.Date1}</Text>
+                      <Text style={{color:"#30A28C",lineHeight: 20, alignSelf: 'flex-start',fontFamily:"Montserrat-SemiBold"}}>{item.patientName}{'\n'}{item.date}</Text>
                     </View>
              
                     </View>
@@ -96,33 +98,75 @@ function Item({ item }) {
 
  const HomeScreen = () => {
 
+  const numColumns = 3;
 
- 
-   doctorName = "Dr Ahmed Khan";
-   specality = "MBBS";
-  
-  let  numColumns = 4;
-   const formatData = (data, numColumns) => {
-    const numberOfFullRows = Math.floor(data.length / numColumns);
-
-      let numberOfElementsLastRow = 8 - (numberOfFullRows * numColumns);
+    const formatData = (data, numColumns) => {
+      const numberOfFullRows = Math.floor(data.length / numColumns);
+    
+      let numberOfElementsLastRow = data.length - (numberOfFullRows * numColumns);
       while (numberOfElementsLastRow !== numColumns && numberOfElementsLastRow !== 0) {
         data.push({ key: `blank-${numberOfElementsLastRow}`, empty: true });
         numberOfElementsLastRow++;
-       
       }
+    
       return data;
     };
-   
-  
  
 
  
  const navigation = useNavigation();  
 
  const [active , setactive] = useState(false);
+ const [isLoading, setLoading] = useState(true);
  const [  OpenBal , setOpenBal] = useState('');
  const [  Phone_Number , setPhone_Number] = useState('');
+ const [balance, setbalance] = useState([]);
+ const [opening, setopening] = useState([]);
+ const [closing, setclosing] = useState([]);
+ const [patientName, setpatientName] = useState([]);
+ const [date, setDate] = useState([]);
+ const [doctorName, setDoctorName] = useState([]);
+ const [speciality, setSpeaciality] = useState([]);
+
+ const [patientDoc, setPatientDoc] = useState([]);
+
+ useEffect(() => {
+
+
+
+  let one = "http://emr.daldaeagleseye.com/emrappointment/balance/today"
+  let two = "http://emr.daldaeagleseye.com/emrappointment/appointment/patient/tehreemhussain1/upcoming-appointments/"
+   
+  const requestOne = axios.get(one);
+  const requestTwo = axios.get(two);
+   
+  axios.all([requestOne, requestTwo]).then(axios.spread((...responses) => {
+    const responseOne = responses[0]
+    console.warn(responseOne.data)
+    setopening(responseOne.data.result[0].opening)
+    setbalance(responseOne.data.result[0].balance)
+    setclosing(responseOne.data.result[0].closing)
+
+    console.log(closing)
+
+    const responseTwo = responses[1]
+
+    console.warn(responseTwo.data)
+
+    const data1 = formatData(responseTwo.data.result, 3);
+
+    console.log("data1", data1)
+    setPatientDoc(data1);
+    console.log(patientDoc,"patientdoc")
+    console.log(patientDoc[0].appointmentId)
+
+  })).catch(errors => {
+      console.log(errors)
+
+  }).then(() => setLoading(false))
+
+
+}, []);
 
 
     return (
@@ -183,6 +227,10 @@ function Item({ item }) {
                   <TextInput style={[styles.Edittext,{height:40},{width:200}]}
                   placeholder="0.00" 
                   keyboardType = 'numeric'
+                  editable={false}
+                  selectTextOnFocus={false}
+                  color="black"
+                  value={opening}
                   placeholderTextColor="#3FB39B"
                      onChangeText={ (Phone_Number)=> setPhone_Number(Phone_Number)}/> 
 </TouchableOpacity>
@@ -195,6 +243,10 @@ function Item({ item }) {
                   <TextInput style={[styles.Edittext,{height:40},{width:200}]}
                   placeholder="0.00" 
                   keyboardType = 'numeric'
+                  editable={false}
+                  selectTextOnFocus={false}
+                  color="black"
+                  value={balance}
                   placeholderTextColor="#3FB39B"
                   onChangeText={ (Phone_Number)=> setPhone_Number(Phone_Number)}/> 
 
@@ -208,6 +260,10 @@ function Item({ item }) {
                   <TextInput style={[styles.Edittext,{height:40},{width:200}]}
                   placeholder="0.00" 
                   keyboardType = 'numeric'
+                  editable={false}
+                  selectTextOnFocus={false}
+                  color="black"
+                  value={closing}
                   placeholderTextColor="#3FB39B"
                   onChangeText={ (Phone_Number)=> setPhone_Number(Phone_Number)}/> 
 
@@ -230,7 +286,7 @@ function Item({ item }) {
             </TouchableOpacity>
             
             <TouchableOpacity style={[styles.button_Side_by_Side,{width:300}]}
-              onPress={() =>navigation.navigate("selectDocbooking")}
+              onPress={() =>navigation.navigate("SelectDocbooking")}
               > 
               <Text style={styles.Button_text_styling}>
               BOOKING MANAGEMENT</Text>
@@ -247,16 +303,16 @@ function Item({ item }) {
   
              <View style= {{flex:1 , height:"100%",width: '100%'}}>
              <SafeAreaView style={{flex:1}} >
-        <FlatList
+ <FlatList
   
           style={{flex:1,  marginRight: 40,marginLeft: 40,marginBottom: 40}}
-          data={formatData(patientDoc, numColumns)}
+          data={patientDoc}
           renderItem={({ item }) => <Item item={item}/>}
           keyExtractor={item => item.email}
           numColumns = {numColumns}
           // scrollEnabled={isScrollEnabled}
-        />
-</SafeAreaView>
+        /> 
+</SafeAreaView> 
 
         </View>
 

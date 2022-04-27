@@ -1,4 +1,4 @@
-import React, {Component, useState} from 'react';
+import React, {Component, useState,useEffect} from 'react';
 import { Text, View, TouchableOpacity,TextInput, FlatList, Image,SafeAreaView}  from 'react-native';
 import UnitClerkHeader from './AllHeaders/UnitClerkHeader';
 import PatientHeader from './AllHeaders/PatientHeader';
@@ -10,17 +10,27 @@ import { useNavigation } from '@react-navigation/native';
 // import { COLORS } from '../styles/colors';
 import doctorApp from './DATA/doctorApp.json';
 import { ScrollView } from 'react-native-gesture-handler';
+import axios from 'axios';
 
 
-
-function Item({ item }) {
+function Item({ item ,doctorInfo, patient, schedule } ) {
     const navigation = useNavigation();   
+    if (item.empty === true) {
+      return <View style={[styles.item, styles.itemInvisible]} />;
+    }
   
       return (
 
         <TouchableOpacity style={styles.listItemBox}
-        onPress={() => navigation.navigate('AppointmentConfirmation')}
-        >
+        onPress={() => navigation.navigate('AppointmentConfirmation', {
+          slotDetails : item,
+          doctorInfo: doctorInfo,
+          patient: patient,
+          schedule: schedule
+
+
+         })}
+>
           <View style={{flex:1}}>
             
      
@@ -34,11 +44,11 @@ function Item({ item }) {
 
           </View>
 
-            <Text style={{ textAlign: 'left', fontSize: 22, color:"#3FB39B", textAlign: 'center',     fontFamily:"Montserrat-Regular",}}>{item.slot}</Text>
+            <Text style={{ textAlign: 'left', fontSize: 22, color:"#3FB39B", textAlign: 'center',     fontFamily:"Montserrat-Regular",}}>{item.date}</Text>
 
             
             <View style = {{padding: 5, width: '100%', height: '100%'}}>
-            <Text style={{ textAlign: 'center', fontSize: 17,  color: 'grey'   ,  fontFamily:"Montserrat-Regular",}}>{item.date}</Text>
+            <Text style={{ textAlign: 'center', fontSize: 17,  color: 'grey'   ,  fontFamily:"Montserrat-Regular",}}>{item.startTime}{" - "}{item.endTime}</Text>
             
         
         <View style= {{justifyContent: 'flex-end' }}> 
@@ -47,7 +57,15 @@ function Item({ item }) {
  
        
             <TouchableOpacity style={[styles.smallRoundedBlueRoundedNoMargin,{marginTop:20}]}
-                   onPress={() => navigation.navigate('AppointmentConfirmation')} >
+                   onPress={() => navigation.navigate('AppointmentConfirmation', {
+                    slotDetails : item,
+                    doctorInfo: doctorInfo,
+                    patient: patient,
+                    schedule: schedule
+
+
+                   })}
+           >
               <Text style={[styles.cardText,{fontSize: 18},{color: 'white'}]}>Book </Text>
             </TouchableOpacity>
       
@@ -68,29 +86,66 @@ function Item({ item }) {
     }
 
 
-  const SelectSlot = () => {
+  const SelectSlot = ({route}) => {
 
 
  
-     let doctorName = "Dr Ahmed Khan";
-    let specality = "Family Medicine";
-   
-   let  numColumns = 4;
+    const numColumns = 4;
+
     const formatData = (data, numColumns) => {
-     const numberOfFullRows = Math.floor(data.length / numColumns);
- 
-       let numberOfElementsLastRow = 8 - (numberOfFullRows * numColumns);
-       while (numberOfElementsLastRow !== numColumns && numberOfElementsLastRow !== 0) {
-         data.push({ key: `blank-${numberOfElementsLastRow}`, empty: true });
-         numberOfElementsLastRow++;
-        
-       }
-       return data;
-     };
+      const numberOfFullRows = Math.floor(data.length / numColumns);
     
+      let numberOfElementsLastRow = data.length - (numberOfFullRows * numColumns);
+      while (numberOfElementsLastRow !== numColumns && numberOfElementsLastRow !== 0) {
+        data.push({ key: `blank-${numberOfElementsLastRow}`, empty: true });
+        numberOfElementsLastRow++;
+      }
+    
+      return data;
+    };
+    const { schedule } = route.params;
+    const { doctorInfo } = route.params;
+    const { patient } = route.params;
+ 
+    const [isLoading, setLoading] = useState(true);
+    const [slot, setSlot] = useState([]);
+    useEffect(() => {
+
+
+let one = "http://emr.daldaeagleseye.com/emrappointment/appointment/provider/weekly-schedule/schedule/slot?provider=demodoctor1&date="+schedule
+const requestOne = axios.get(one);
+
+ 
+axios.all([requestOne]).then(axios.spread((...responses) => {
+  const responseOne = responses[0]
+  console.warn(responseOne.data)
+ 
+
+
+        
+        const data1 = formatData(responseOne.data.result, 4);
+
+        console.log("data1", data1)
+        setSlot(data1);
+
+
+
+     
+
+      })).catch(errors => {
+        console.log(errors)
+  
+    }).then(() => setLoading(false))
+  
+  
+  }, []);
+
+
+ 
+ 
    
   
-    
+     
     return (
   
         <View style={styles.container} >
@@ -107,8 +162,8 @@ function Item({ item }) {
             />             
             </View>
             <View>
-             <Text style= {styles.cardText30}>{doctorName}</Text>
-             <Text style= {[styles.cardText, {alignSelf: 'flex-start'}]}>{specality}</Text>
+             <Text style= {styles.cardText30}>{doctorInfo.fullName}</Text>
+             <Text style= {[styles.cardText, {alignSelf: 'flex-start'}]}>{doctorInfo.speciality}</Text> 
              </View>
              </View>
              <View style= {{flex:1 , height:"100%",width: '100%', alignSelf: 'center'}}>
@@ -116,8 +171,8 @@ function Item({ item }) {
         <FlatList
   
           style={{flex:1, marginTop: 30, margin: 40}}
-          data={ formatData(doctorApp, numColumns)}
-          renderItem={({ item }) => <Item item={item}/>}
+          data={slot}
+          renderItem={({ item }) => <Item item={item} doctorInfo={doctorInfo}  patient= {patient}  schedule={schedule} />}
           keyExtractor={item => item.email}
           numColumns = {numColumns}
           // scrollEnabled={isScrollEnabled}

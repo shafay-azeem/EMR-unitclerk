@@ -24,17 +24,17 @@ const PatientDemographics = () => {
           <View>
           <Header name="Patient Demographics" class= ""/>
        <UnitClerkHeader/>
-       <PatientHeader/>
+       {/* <PatientHeader/> */}
 
 
-               <TouchableOpacity style={[styles.buttonGeneral,{marginTop:110}]}
+               {/* <TouchableOpacity style={[styles.buttonGeneral,{marginTop:110}]}
               onPress={() =>navigation.navigate("SearchDoctor")}
               > 
               <Text style={styles.Button_text_styling}>
               BOOK APPOINTMENT </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
-            <TouchableOpacity style={styles.buttonGeneral}
+            <TouchableOpacity style={[styles.buttonGeneral,{marginTop:130}]}
               onPress={() =>navigation.navigate("UpcomingAppointmentSchedule")}
               > 
               <Text style={styles.Button_text_styling}>

@@ -18,6 +18,19 @@ const SearchPatient = () => {
     
   let [Phone_Number, setPhone_Number] = useState('');
 
+  // if (Mr_Number.trim().length < 7 ||Mr_Number.trim().length > 7 ) {
+  //   alert('MRNumber must be of 7 characters');
+  //    return;
+  //   }
+
+  // let regMR=/^[MR]{2}[0-9]{5}$/;
+  // if (regMR.test(Mr_Number.toString())){
+  // }
+  // else{
+  //   alert('Enter Mr Number Acc to Our Hints');
+  //   return;
+  // }
+
     return (
   
       <SafeAreaView style={[styles.container,{flex: 1}]}>
@@ -63,7 +76,9 @@ const SearchPatient = () => {
               onChangeText={ (Phone_Number)=> setPhone_Number(Phone_Number)}/>  
          
              <TouchableOpacity style={styles.buttonForSearchPatient}
-             onPress={() =>navigation.navigate("SelectPatient")}
+             onPress={() =>navigation.navigate("SelectPatient", {
+              mrNum: Mr_Number
+            })}
              > 
              <Text style={styles.Button_text_styling}>
              SEARCH </Text>

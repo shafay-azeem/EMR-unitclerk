@@ -11,7 +11,7 @@ import { Picker } from "@react-native-picker/picker";
 import { useNavigation } from '@react-navigation/native';
 import { FadeFromBottomAndroid } from '@react-navigation/stack/lib/typescript/src/TransitionConfigs/TransitionPresets';
   
-  const Payment = () => {
+  const Payment = ({route}) => {
 
 
   const navigation = useNavigation();  
@@ -19,8 +19,12 @@ import { FadeFromBottomAndroid } from '@react-navigation/stack/lib/typescript/sr
   const [active , setactive] = useState(false);
 
   const [PROMOCODE , setPROMOCODE] = useState('');
+  const { slotDetails } = route.params;
+  const { doctorInfo } = route.params;
+  const { patient } = route.params;
 
   let [method, setmethod] = useState('Cash');
+
 
     return (
       <View style={styles.container}>
@@ -80,28 +84,28 @@ import { FadeFromBottomAndroid } from '@react-navigation/stack/lib/typescript/sr
 
             <View style = {{flexDirection: 'column' ,alignItems: 'center',marginRight:10}}>
             <Text style={{ color: 'black',alignSelf: 'flex-start',fontSize:20, fontFamily:"Montserrat-Regular"}}>Doctor Name </Text>
-            <Text numberOfLines={1} style={{color: 'black', alignSelf: 'flex-start',fontFamily:"Montserrat-Regular",fontSize:18,color:'#3FB39B',marginRight:20,marginTop:5}}>{drinfo.doctorName}</Text>
+            <Text numberOfLines={1} style={{color: 'black', alignSelf: 'flex-start',fontFamily:"Montserrat-Regular",fontSize:18,color:'#3FB39B',marginRight:20,marginTop:5}}>{doctorInfo.firstName}</Text>
        
             </View>
             <View style = {{flexDirection: 'column' ,alignItems: 'center',marginRight:10}}>
             <Text style={{ color: 'black',alignSelf: 'flex-start',fontSize:20,  fontFamily:"Montserrat-Regular"}}>Speciality </Text>
-            <Text style={{color: 'black', alignSelf: 'flex-start',fontFamily:"Montserrat-Regular",fontSize:18,color:'#3FB39B',marginRight:20,marginTop:5}}>{drinfo.specality}</Text>
+            <Text style={{color: 'black', alignSelf: 'flex-start',fontFamily:"Montserrat-Regular",fontSize:18,color:'#3FB39B',marginRight:20,marginTop:5}}>{doctorInfo.speciality}</Text>
        
             </View>
           
             <View style = {{flexDirection: 'column',alignItems: 'center',marginRight:10}}>
             <Text style={{ color: 'black',alignSelf: 'flex-start',fontSize:20, fontFamily:"Montserrat-Regular"}}>Fee</Text>
-            <Text style={{color: 'black', alignSelf: 'flex-start',fontFamily:"Montserrat-Regular",fontSize:18,color:'#3FB39B',marginRight:20,marginTop:5}}>{drinfo.Fees}</Text>
+            <Text style={{color: 'black', alignSelf: 'flex-start',fontFamily:"Montserrat-Regular",fontSize:18,color:'#3FB39B',marginRight:20,marginTop:5}}>{doctorInfo.initialFees} Rs</Text>
        
             </View>
             <View style = {{flexDirection: 'column',alignItems: 'center',marginRight:10}}>
             <Text style={{ color: 'black',alignSelf: 'flex-start',fontSize:20, fontFamily:"Montserrat-Regular"}}>PhoneNo</Text>
-            <Text style={{color: 'black', alignSelf: 'flex-start',fontFamily:"Montserrat-Regular",fontSize:18,color:'#3FB39B',marginRight:20,marginTop:5}}>{drinfo.doctorPhone}</Text>
+            <Text style={{color: 'black', alignSelf: 'flex-start',fontFamily:"Montserrat-Regular",fontSize:18,color:'#3FB39B',marginRight:20,marginTop:5}}>{doctorInfo.phoneNum}</Text>
        
             </View>
             <View style = {{flexDirection: 'column',alignItems: 'center',marginRight:10}}>
             <Text style={{ color: 'black',alignSelf: 'flex-start',fontSize:20 ,fontFamily:"Montserrat-Regular"}}>Location</Text>
-            <Text style={{color: 'black', alignSelf: 'flex-start',fontFamily:"Montserrat-Regular",fontSize:18,color:'#3FB39B',marginRight:20,marginTop:5}}>{drinfo.Location}</Text>
+            <Text style={{color: 'black', alignSelf: 'flex-start',fontFamily:"Montserrat-Regular",fontSize:18,color:'#3FB39B',marginRight:20,marginTop:5}}>{invoice['IssuedBy '] }</Text>
        
             </View>
          
@@ -134,7 +138,7 @@ import { FadeFromBottomAndroid } from '@react-navigation/stack/lib/typescript/sr
 
                 <View style = {{flexDirection: 'row'}}>
                 <Text style = {[{alignSelf:'flex-start',marginTop:10,fontSize:15,color:'black',fontFamily:"Montserrat-Regular"}]}>Invoice Date: </Text>
-                <Text style = {[{alignSelf:'flex-start',marginTop:7,fontFamily:"Montserrat-SemiBold",fontSize:20,color:'#3FB39B'}]}>{invoice['InvoiceDate'] }</Text>
+                <Text style = {[{alignSelf:'flex-start',marginTop:7,fontFamily:"Montserrat-SemiBold",fontSize:20,color:'#3FB39B'}]}>{slotDetails.date}</Text>
                 </View>
 
                 <View style = {{flexDirection: 'row'}}>
@@ -144,19 +148,19 @@ import { FadeFromBottomAndroid } from '@react-navigation/stack/lib/typescript/sr
                 </View>
                 <View style = {{flexDirection: 'row'}}>
                 <Text style = {[{marginTop:10,fontSize:15,color:'black',fontFamily:"Montserrat-Regular"}]}>Patient ID: </Text>
-                <Text style = {[{marginTop:7,fontSize:20,color:'#3FB39B',fontFamily:"Montserrat-SemiBold"}]}>{invoice.PatientId }</Text>
+                <Text style = {[{marginTop:7,fontSize:20,color:'#3FB39B',fontFamily:"Montserrat-SemiBold"}]}>{patient.patientId}</Text>
 
                 </View>
 
                 <View style = {{flexDirection: 'row'}}>
                 <Text style = {[{alignSelf:'flex-start',marginTop:10,fontSize:15,color:'black',fontFamily:"Montserrat-Regular"}]}>Patient Name: </Text>
-                <Text style = {[{alignSelf:'flex-start',marginTop:7,fontFamily:"Montserrat-SemiBold",fontSize:20,color:'#3FB39B'}]}>{invoice.patientName }</Text>
+                <Text style = {[{alignSelf:'flex-start',marginTop:7,fontFamily:"Montserrat-SemiBold",fontSize:20,color:'#3FB39B'}]}>{patient.firstName}{""}{patient.lastName}</Text>
 
                 </View>
 
                 <View style = {{flexDirection: 'row'}}>
                 <Text style = {[{alignSelf:'flex-start',marginTop:10,fontSize:15,color:'black',fontFamily:"Montserrat-Regular"}]}>Teleconsultation Payment: </Text>
-                <Text style = {[{alignSelf:'flex-start',marginTop:7,fontFamily:"Montserrat-SemiBold",fontSize:20,color:'#3FB39B'}]}>{invoice.TeleconsultationPayment }</Text>
+                <Text style = {[{alignSelf:'flex-start',marginTop:7,fontFamily:"Montserrat-SemiBold",fontSize:20,color:'#3FB39B'}]}>{doctorInfo.initialFees}</Text>
 
                 </View>
 
@@ -167,7 +171,10 @@ import { FadeFromBottomAndroid } from '@react-navigation/stack/lib/typescript/sr
 
                 
                 <TouchableOpacity
-                  onPress={() =>navigation.navigate('Payment')}
+                  onPress={() =>navigation.navigate('Payment', {
+                    doctorInfo: doctorInfo,
+                    slotDetails: slotDetails
+                  })}
                   style={[styles.smallRoundedBlueRounded,{width:'60%',marginTop:40,height:"20%"}]}
                 >
                    <Text style={styles.Button_text_styling}
@@ -175,7 +182,7 @@ import { FadeFromBottomAndroid } from '@react-navigation/stack/lib/typescript/sr
                             >Apply Promo Code</Text>
                 </TouchableOpacity>
 
- 
+{/*  
 
 
                 <View style={{flexDirection:'row'}}> 
@@ -216,9 +223,9 @@ import { FadeFromBottomAndroid } from '@react-navigation/stack/lib/typescript/sr
            </View>
                 
      </View>
-  </View> 
+  </View>  */}
  {/* </View> */}
- <View style={{flexDirection:'row' }}>
+ <View style={{flexDirection:'row',marginTop:25,marginLeft:100 }}>
                 <Text style = { [{flexDirection: 'row',alignSelf:'flex-start',marginTop:15,fontFamily:"Montserrat-Regular",fontSize:20,color:'black'}]}>Amount Payable: </Text>
                 <View style = {{flexDirection: 'row', width: 70,borderColor: 'orange' ,borderWidth:2, borderRadius: 15, alignItems: 'center',justifyContent:"center",marginTop:15}}>
             {/* <View style = {styles.dollarIcon}>
@@ -227,7 +234,7 @@ import { FadeFromBottomAndroid } from '@react-navigation/stack/lib/typescript/sr
               source={require('../images/dollar.png')}
             />
             </View> */}
-            <Text style= {{color: 'black',justifyContent:'center'}}>500 PKR</Text>
+            <Text style= {{color: 'black',justifyContent:'center'}}>1000 PKR</Text>
             
             </View>
             
@@ -243,7 +250,12 @@ import { FadeFromBottomAndroid } from '@react-navigation/stack/lib/typescript/sr
       
                 </View>
                 <TouchableOpacity
-                  onPress={() =>navigation.navigate('PaymentSuccessfull')}
+                  onPress={() =>navigation.navigate('PaymentSuccessfull', {
+                    slotDetails: slotDetails,
+                    doctorInfo: doctorInfo,
+                    patient: patient,
+                    // schedule: schedule
+                  })}
                   style={styles.smallRoundedBlueRounded}
                 >
                   <Text style={styles.Button_text_styling}>PAY</Text>

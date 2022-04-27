@@ -7,73 +7,56 @@ import {
   ActivityIndicator,
   FlatList,
 } from "react-native";
-import axios from 'axios';
-
 
 // get data from this URL!
-// const movieURL = "https://reactnative.dev/movies.json";
-const baseUrl = 'https://emr-system.000webhostapp.com';
+const movieURL = "https://reactnative.dev/movies.json";
 
 const Api = () => {
   // managing state with 'useState'
   const [isLoading, setLoading] = useState(true);
-  const [firtName, setFirstName] = useState([]);
-  const [lastName, setLastname] = useState([]);
-  const [status, setStatus] = useState("");
-
+  const [data, setData] = useState([]);
+  const [title, setTitle] = useState([]);
+  const [description, setDescription] = useState([]);
 
   // similar to 'componentDidMount', gets called once
   useEffect(() => {
-    // fetch(movieURL)
-    //   .then((response) => response.json()) // get response, convert to json
-    //   .then((json) => {
-    //     setData(json.movies);
-    //     setTitle(json.title);
-    //     setDescription(json.description);
-    //   })
-    //   .catch((error) => alert(error)) // display errors
-    //   .then(() => setLoading(false)); // change loading state
-    axios({
-        method: 'get',
-        url: `${baseUrl}/emrappointment/emrappointment/patient/tehreemhussain1`,
-      }).then((response) => {
-          setFirstName(response.data.result[0].firstName)
-          setLastname(response.data.result[0].lastName)
-          setStatus(response.data.status)
-          
-            console.log(firtName);
-            console.log(status)
-      }).then(() => setLoading(false));
+    fetch(movieURL)
+      .then((response) => response.json()) // get response, convert to json
+      .then((json) => {
+        setData(json.movies);
+        setTitle(json.title);
+        setDescription(json.description);
+      })
+      .catch((error) => alert(error)) // display errors
+      .finally(() => setLoading(false)); // change loading state
   }, []);
 
   // Also get call asynchronous function
-//   async function getMoviesAsync() {
-//     try {
-//       let response = await fetch(movieURL);
-//       let json = await response.json();
-//       setData(json.movies);
-//       setTitle(json.title);
-//       setDescription(json.description);
-//       setLoading(false);
-//     } catch (error) {
-//       alert(error);
-//     }
-//   }
+  async function getMoviesAsync() {
+    try {
+      let response = await fetch(movieURL);
+      let json = await response.json();
+      setData(json.movies);
+      setTitle(json.title);
+      setDescription(json.description);
+      setLoading(false);
+    } catch (error) {
+      alert(error);
+    }
+  }
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* While fetching show the indicator, else show response */}
+      {/* While fetching show the indicator, else show response*/}
       {isLoading ? (
-          
-          <ActivityIndicator size="large" color="#0000ff"/>
-    
-    ) : (
+        <ActivityIndicator />
+      ) : (
         <View>
           {/* Title from URL */}
-          {/* <Text style={styles.title}>{title}</Text> */}
+          <Text style={styles.title}>{title}</Text>
           {/* Display each movie */}
           <View style={{ borderBottomWidth: 1, marginBottom: 12 }}></View>
-          {/* <FlatList
+          <FlatList
             data={data}
             keyExtractor={({ id }, index) => id}
             renderItem={({ item }) => (
@@ -83,13 +66,9 @@ const Api = () => {
                 </Text>
               </View>
             )}
-          /> */}
+          />
           {/* Show the description */}
-          <Text style={styles.description}>{firtName}</Text>
-          <Text style={styles.description}>{lastName}</Text>
-          <Text style={styles.description}>{status}</Text>
-
-
+          <Text style={styles.description}>{description}</Text>
         </View>
       )}
     </SafeAreaView>

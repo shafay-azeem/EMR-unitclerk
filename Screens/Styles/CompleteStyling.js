@@ -38,6 +38,16 @@ export default StyleSheet.create({
     flex: 1,
 
   },
+  item: {
+    backgroundColor: '#4D243D',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    margin: 1,
+    // height: Dimensions.get('window').width / numColumns, // approximate a square
+  },  itemInvisible: {
+    backgroundColor: 'transparent',
+  },
 
     
     containerForSignIn:{
@@ -390,7 +400,7 @@ TextForInsideRowSidebySide:{
       // backgroundColor:COLORS.listItem,
       backgroundColor:'#FFFFFF',
       margin:10,
-      // width:"2%",
+      // width:100,
       height: 250,
       flex:1,
       alignSelf:"center",

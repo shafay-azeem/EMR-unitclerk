@@ -36,13 +36,17 @@ function Item({ item }) {
 
 
 
-  const AppointmentConfirmation = () => {
+  const AppointmentConfirmation = ({route}) => {
     const navigation = useNavigation();  
-
+    const doctorName = "Demo Fatima Khan";
+    const specality = "Cardiologist";    
+    const AppointmentDate = 'Monday, 06 December 2021';
+    const AppointmentTime = '1:00pm - 1:30pm'
+    const { slotDetails } = route.params;
+    const {doctorInfo} = route.params;
+    const {patient} = route.params;
+    const {schedule} = route.params;
  
-    let doctorName = "Dr Ahmed Khan";
-    let specality = "Family Medicine";
-   
     return (
         <View style={styles.container}>
         <Header name="Appointment Confirmation"/>
@@ -63,14 +67,14 @@ function Item({ item }) {
             />             
             </View>
             <View>
-             <Text style= {styles.cardText30}>{doctorName}</Text>
-             <Text style= {[styles.cardText, {alignSelf: 'flex-start',color:'black'}]}>{specality}</Text>
+             <Text style= {styles.cardText30}>{doctorInfo.fullName}</Text>
+             <Text style= {[styles.cardText, {alignSelf: 'flex-start',color:'black'}]}>{doctorInfo.speciality}</Text>
              </View>
              </View>
             
              <View style = {styles.subCardView}>
-               <Text style = {[styles.centeredText,{color:"#3FB39B"}]}>{doctorApp[0].date1}</Text>
-               <Text style = {[styles.centeredText,{color:"#3FB39B"}]}>{doctorApp[0].slot}</Text>
+               <Text style = {[styles.centeredText,{color:"#3FB39B"}]}>{slotDetails.dayname}{", "}{slotDetails.date}</Text>
+               <Text style = {[styles.centeredText,{color:"#3FB39B"}]}>{slotDetails.startTime}{" - "}{slotDetails.endTime}</Text>
              </View>
 
 
@@ -93,7 +97,12 @@ RightText={"Remember Me"}
              <Text style= {[styles.centeredText,{fontFamily:"Montserrat-Bold",color:"#30A28C"}]}>I hearby confirm that, I have read and understood everything written in the consent form</Text>
              </View> */}
              <TouchableOpacity style={[styles.buttonGeneral,{marginTop:40}]}
-              onPress={() =>navigation.navigate("AppointmentDetails")}
+              onPress={() =>navigation.navigate("AppointmentDetails", {
+                slotDetails: slotDetails,
+                doctorInfo: doctorInfo,
+                patient: patient,
+                schedule: schedule
+              })}
               > 
               <Text style={styles.Button_text_styling}>
               CONFIRM APPOINTMENT </Text>

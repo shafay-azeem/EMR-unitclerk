@@ -1,4 +1,4 @@
-import React, {Component, useState} from 'react';
+import React, {Component, useState,useEffect} from 'react';
 import { Text, View, TouchableOpacity,TextInput, FlatList, Image,SafeAreaView}  from 'react-native';
 import UnitClerkHeader from './AllHeaders/UnitClerkHeader';
 import PatientHeader from './AllHeaders/PatientHeader';
@@ -11,16 +11,25 @@ import { useNavigation } from '@react-navigation/native';
 import doctorApp from './DATA/doctorApp.json';
 import { ScrollView } from 'react-native-gesture-handler';
 
+import axios from 'axios';
 
-
-function Item({ item }) {
-    const navigation = useNavigation();   
+function Item({ item , doctorInfo, patient}) {
+ 
+    const navigation = useNavigation(); 
+    if (item.empty === true) {
+      return <View style={[styles.item, styles.itemInvisible]} />;
+    }
+  
   
       return (
 
         <TouchableOpacity style={styles.listItemBox}
-        onPress={() => navigation.navigate('SelectSlot')}
-        >
+        onPress={() => navigation.navigate('SelectSlot' ,{ 
+          schedule : item.date,
+          doctorInfo : doctorInfo,
+          patient: patient
+          })}
+          >
           <View style={{flex:1}}>
             
      
@@ -38,7 +47,8 @@ function Item({ item }) {
 
             
             <View style = {{padding: 5, width: '100%', height: '100%'}}>
-            <Text style={{ textAlign: 'center', fontSize: 17,  color: 'grey',  fontFamily:"Montserrat-Regular"}}>{item.time}</Text>
+            <Text style={{ textAlign: 'center', fontSize: 17,  color: 'grey',  fontFamily:"Montserrat-Regular"}}>{item.startTime}{" - "}{item.endTime}</Text>
+ 
             
         
         <View style= {{justifyContent: 'flex-end' }}> 
@@ -46,7 +56,7 @@ function Item({ item }) {
             
  
                   <Text style={{ color: 'grey',marginTop:20,fontSize:15,  fontFamily:"Montserrat-Regular"}}>Available Slots:{'\n'}</Text>
-                  <Text style={{ color:"#3FB39B",marginTop:20,fontWeight:'bold',fontSize:16 , fontFamily:"Montserrat-Regular"}}>{item.availableSlots}</Text>
+                  <Text style={{ color:"#3FB39B",marginTop:20,fontWeight:'bold',fontSize:16 , fontFamily:"Montserrat-Regular"}}>{item.slotAvailable}</Text>
                   
              
            
@@ -69,26 +79,85 @@ function Item({ item }) {
 
 
   
-  const SelectSchedule = () => {
+  const SelectSchedule = ({route}) => {
 
 
- 
-    let doctorName = "Dr Ahmed Khan";
-    let specality = "Family Medicine";
-   
-   let  numColumns = 4;
+    const numColumns = 4;
+
     const formatData = (data, numColumns) => {
-     const numberOfFullRows = Math.floor(data.length / numColumns);
- 
-       let numberOfElementsLastRow = 8 - (numberOfFullRows * numColumns);
-       while (numberOfElementsLastRow !== numColumns && numberOfElementsLastRow !== 0) {
-         data.push({ key: `blank-${numberOfElementsLastRow}`, empty: true });
-         numberOfElementsLastRow++;
-        
-       }
-       return data;
-     };
+      const numberOfFullRows = Math.floor(data.length / numColumns);
     
+      let numberOfElementsLastRow = data.length - (numberOfFullRows * numColumns);
+      while (numberOfElementsLastRow !== numColumns && numberOfElementsLastRow !== 0) {
+        data.push({ key: `blank-${numberOfElementsLastRow}`, empty: true });
+        numberOfElementsLastRow++;
+      }
+    
+      return data;
+    };
+    const [isLoading, setLoading] = useState(true);
+    const [schedule, setSchedule] = useState([]);
+    const { doctorInfo } = route.params;
+    const { patient } = route.params;
+  
+
+
+    // console.log(provider)
+
+    useEffect(() => {
+
+// console.log(provider)
+// console.log(speciality,"speciality")
+let one = "https://emr-system.000webhostapp.com/emrappointment/emrappointment/appointment/provider/weekly-schedule/schedule?provider=demodoctor1"
+const requestOne = axios.get(one);
+
+ 
+axios.all([requestOne]).then(axios.spread((...responses) => {
+  const responseOne = responses[0]
+  console.warn(responseOne.data)
+ 
+
+
+        
+        const data1 = formatData(responseOne.data.result, 4);
+
+        console.log("data1", data1)
+        setSchedule(data1);
+
+
+
+        console.log('scheduleApi',responseOne.data.result);
+ 
+        console.log('date saad', schedule[0].date)
+
+      })).catch(errors => {
+        console.log(errors)
+  
+    }).then(() => setLoading(false))
+  
+  
+  }, []);
+
+//   axios({
+//     method: 'get',
+//     url: `https://emr-system.000webhostapp.com/emrappointment/emrappointment/appointment/provider/weekly-schedule/schedule?provider=${provider}`,
+//   }).then((response) => {
+
+//     const data1 = formatData(response.data.result, 4);
+
+//     console.log("data1", data1)
+//     setschedule(data1);
+
+
+
+//     console.log(response.data.result);
+//     console.log(doctor[0].patientId);
+//     console.log(doctor);
+//     console.log(provider)
+
+//   }).then(() => setLoading(false));
+// }, []);
+
    
   
     return (
@@ -108,22 +177,22 @@ function Item({ item }) {
             />             
             </View>
             <View>
-             <Text style= {styles.cardText30}>{doctorName}</Text>
-             <Text style= {[styles.cardText, {alignSelf: 'flex-start'}]}>{specality}</Text>
+             <Text style= {styles.cardText30}>{doctorInfo.fullName}</Text>
+             <Text style= {[styles.cardText, {alignSelf: 'flex-start'}]}>{doctorInfo.speciality}</Text>
              </View>
              </View>
 
              <View style= {{flex:1 , height:"100%",width: '100%', alignSelf: 'center'}}>
              <SafeAreaView style={{flex:1}}>
-        <FlatList
+             <FlatList
   
-          style={{flex:1, marginTop: 30, marginRight:30,marginLeft:30}}
-          data={ formatData(doctorApp,numColumns)}
-          renderItem={({ item }) => <Item item={item}/>}
-          keyExtractor={item => item.email}
-          numColumns = {numColumns}
-         
-        />
+  style={{flex:1,  marginRight: 40,marginLeft: 40,marginBottom: 40}}
+  data={schedule}
+  renderItem={({ item }) => <Item item={item} doctorInfo = {doctorInfo}   patient= {patient} />}
+  keyExtractor={item => item.email}
+  numColumns = {numColumns}
+
+/> 
 
 </SafeAreaView>
 </View>
