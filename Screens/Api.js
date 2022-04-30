@@ -3,34 +3,52 @@ import {
   StyleSheet,
   Text,
   View,
+  Image,
   SafeAreaView,
   ActivityIndicator,
   FlatList,
 } from "react-native";
 
 // get data from this URL!
-const movieURL = "https://reactnative.dev/movies.json";
+const movieURL = "http://emr.daldaeagleseye.com/emrappointment/appointment/patient/tehreemhussain1/documents/laboratory";
 
 const Api = () => {
   // managing state with 'useState'
   const [isLoading, setLoading] = useState(true);
-  const [data, setData] = useState([]);
-  const [title, setTitle] = useState([]);
-  const [description, setDescription] = useState([]);
+  const [img, setimg] = useState([]);
+  const [Img, setImg] = useState();
+  // const [patientid, setpatientid] = useState([]);
+  // const [description, setDescription] = useState([]);
 
   // similar to 'componentDidMount', gets called once
   useEffect(() => {
     fetch(movieURL)
       .then((response) => response.json()) // get response, convert to json
       .then((json) => {
-        setData(json.movies);
-        setTitle(json.title);
-        setDescription(json.description);
+        console.log(json.result[9],"json")
+        setimg(json.result[9].imgPath)
+        console.log(img,"queen")
+        // setData(json.movies);
+        // setTitle(json.title);
+        // setDescription(json.description);
+        // fetchImage();
+        console.log(img.toString(),'lol');
       })
       .catch((error) => alert(error)) // display errors
       .finally(() => setLoading(false)); // change loading state
   }, []);
 
+
+  const fetchImage = async () => {
+    const res = await fetch(img.toString());
+    const imageBlob = await res.blob();
+    const imageObjectURL = URL.createObjectURL(imageBlob);
+    setImg(imageObjectURL);
+  };
+
+  // useEffect(() => {
+  //   fetchImage();
+  // }, []);
   // Also get call asynchronous function
   async function getMoviesAsync() {
     try {
@@ -53,10 +71,10 @@ const Api = () => {
       ) : (
         <View>
           {/* Title from URL */}
-          <Text style={styles.title}>{title}</Text>
+          
           {/* Display each movie */}
           <View style={{ borderBottomWidth: 1, marginBottom: 12 }}></View>
-          <FlatList
+          {/* <FlatList
             data={data}
             keyExtractor={({ id }, index) => id}
             renderItem={({ item }) => (
@@ -66,9 +84,15 @@ const Api = () => {
                 </Text>
               </View>
             )}
-          />
+          /> */}
           {/* Show the description */}
-          <Text style={styles.description}>{description}</Text>
+          <Image
+        style={[styles.tinyLogo,{backgroundColor:"green"}]}
+        source={{uri: img}}
+
+        
+      />
+          <Text>{img}</Text>
         </View>
       )}
     </SafeAreaView>
@@ -94,6 +118,10 @@ const styles = StyleSheet.create({
     marginBottom: 18,
     fontWeight: "200",
     color: "green",
+  },
+  tinyLogo: {
+    width: 300,
+    height: 530,
   },
 });
 

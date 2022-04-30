@@ -6,15 +6,46 @@ import styles from './Styles/CompleteStyling';
 import Header from './Header';
 import UnitClerkHeader from './AllHeaders/UnitClerkHeader';
 import PatientHeader from './AllHeaders/PatientHeader';
+import axios from 'axios';
 
 import { useNavigation } from '@react-navigation/native';
 
 
-const PatientDemographics = () => {
+const PatientDemographics = ({route}) => {
    
  const navigation = useNavigation();  
+ const { patientId } = route.params;
+ const [isLoading, setLoading] = useState(true);
+ const [patient1, setPatient] = useState([]);
+ useEffect(() => {
+
+ let one = "http://emr.daldaeagleseye.com/emrappointment/patient/"+patientId;
+ const requestOne = axios.get(one);
+
+ axios.all([requestOne]).then(axios.spread((...responses) => {
+  const responseOne = responses[0]
+  console.warn(responseOne.data)
+ 
 
 
+        
+
+  
+  setPatient( responseOne.data.result[0])
+  console.log("PD first", patient1)
+
+
+      })).catch(errors => {
+        console.log(errors)
+  
+    }).then(() => setLoading(false))
+  
+  
+  }, []);
+  console.log("PD",patient1)
+
+
+console.log("Heheheheheh", patientId)
      return (
        <ScrollView style={styles.container}>
        <SafeAreaView style={{flex: 1}}>
@@ -27,15 +58,21 @@ const PatientDemographics = () => {
        {/* <PatientHeader/> */}
 
 
-               {/* <TouchableOpacity style={[styles.buttonGeneral,{marginTop:110}]}
-              onPress={() =>navigation.navigate("SearchDoctor")}
+               <TouchableOpacity style={[styles.buttonGeneral,{marginTop:150}]}
+              onPress={() =>navigation.navigate("SearchDoctor", {
+                patient: patient1
+
+              })}
               > 
               <Text style={styles.Button_text_styling}>
               BOOK APPOINTMENT </Text>
-            </TouchableOpacity> */}
+            </TouchableOpacity>
 
-            <TouchableOpacity style={[styles.buttonGeneral,{marginTop:130}]}
-              onPress={() =>navigation.navigate("UpcomingAppointmentSchedule")}
+            <TouchableOpacity style={[styles.buttonGeneral]}
+              onPress={() =>navigation.navigate("UpcomingAppointmentSchedule",{
+                patient: patient1
+
+              })}
               > 
               <Text style={styles.Button_text_styling}>
               UPCOMING APPOINTMENT </Text>
@@ -43,14 +80,19 @@ const PatientDemographics = () => {
 
 
             <TouchableOpacity style={styles.buttonGeneral}
-              onPress={() =>navigation.navigate("UpdatePatientProfile")}
+              onPress={() =>navigation.navigate("RecordsSee",{
+                patient: patient1
+
+              })}
               > 
               <Text style={styles.Button_text_styling}>
-              UPDATE PATIENT PROFILE </Text>
+              SEE RECORDS </Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.buttonGeneral}
-              onPress={() =>navigation.navigate("ImagesRecords")}
+              onPress={() =>navigation.navigate("ImagesRecords",{
+                patient: patient1
+              })}
               > 
               <Text style={styles.Button_text_styling}>
              IMAGES OR RECORD </Text>

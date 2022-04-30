@@ -18,7 +18,7 @@ import axios from 'axios';
 
 function Item({ item }) {
     const navigation = useNavigation();   
-
+  console.log("patient", item)
     if (item.empty === true) {
       return <View style={[styles.item, styles.itemInvisible]} />;
     }
@@ -28,8 +28,8 @@ function Item({ item }) {
         
 
         <TouchableOpacity style={styles.listItemBox}
-        onPress={() => navigation.navigate('SearchDoctor',  {         
-          patient: item
+        onPress={() => navigation.navigate('PatientDemographics',  {         
+          patientId: item.patientId
           })}
           
           >
@@ -65,7 +65,9 @@ function Item({ item }) {
  
        
             <TouchableOpacity style={[styles.smallRoundedBlueRoundedNoMargin,{marginTop:10,marginBottom:40}]}
-                   onPress={() => navigation.navigate('PatientDemographics')} >
+                   onPress={() => navigation.navigate('PatientDemographics',  {         
+                    patientId: item.patientId
+                    })}>
               <Text style={[styles.cardText,{fontSize: 18},{color: 'white'}]}>SELECT </Text>
             </TouchableOpacity>
       

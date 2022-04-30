@@ -27,7 +27,7 @@ function Item({ item }) {
       return (
 
         <TouchableOpacity style={styles.listItemBox}
-        onPress={() => navigation.navigate('PatientDemographics')}
+        onPress={() => navigation.navigate('HomeScreen')}
         >
           <View style={{flex:1}}>
             
@@ -77,7 +77,7 @@ function Item({ item }) {
         
                     <View style= {{flexDirection: "row"}}>
                   
-                  <View style= {{flexDirection: "row",width:'50%'}}>
+                  <View style= {{flexDirection: "row",width:'100%',justifyContent:'center'}}>
 
                   
                 
@@ -86,9 +86,9 @@ function Item({ item }) {
                 </View>
                 <View style= {{flexDirection: "row",width:'50%',alignSelf:'flex-end',justifyContent:'flex-end'}}>
                 <TouchableOpacity
-                  // onPress={() => this.props.navigation.navigate('')}
+                onPress={() => this.props.navigation.navigate('')}
                 >
-                  <Text style={{ textAlign:'right',color:"black",marginTop:20,fontFamily:"Montserrat-Bold",fontSize:12}}>VIEW DETAILS</Text>
+                  {/* <Text style={{ textAlign:'right',color:"black",marginTop:20,fontFamily:"Montserrat-Bold",fontSize:12}}>VIEW DETAILS</Text> */}
                 </TouchableOpacity>
                   </View>
 
@@ -105,7 +105,7 @@ function Item({ item }) {
     const baseUrl='http://emr.daldaeagleseye.com/emrappointment/';
 
 
-  const UpcomingAppointmentSchedule = () => {
+  const UpcomingAppointmentSchedule = ({route}) => {
   
     const numColumns = 3;
 
@@ -122,7 +122,7 @@ function Item({ item }) {
     };
 
     const navigation = useNavigation();  
-
+    const { patient } = route.params;
  const [active , setactive] = useState(false);
  const [isLoading, setLoading] = useState(true);
  const [  OpenBal , setOpenBal] = useState('');
@@ -139,9 +139,9 @@ function Item({ item }) {
   useEffect(() => {
 
 
+console.log("lol",patient.patientId)
 
-
-  let two = "http://emr.daldaeagleseye.com/emrappointment/appointment/patient/tehreemhussain1/upcoming-appointments/"
+  let two = "https://emr-system.000webhostapp.com/emrappointment/emrappointment/appointment/patient/"+patient.patientId+"/upcoming-appointments/"
 
   const requestTwo = axios.get(two);
    

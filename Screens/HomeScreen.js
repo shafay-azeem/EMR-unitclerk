@@ -1,5 +1,5 @@
 import React, {Component, useState,useEffect} from 'react';
-import { Text, View, TouchableOpacity,TextInput, FlatList, Image,SafeAreaView,Modal,Alert,ActivityIndicator}  from 'react-native';
+import { Text, View, TouchableOpacity,TextInput, FlatList, Image,SafeAreaView,Modal,Alert,ActivityIndicator,RefreshControl}  from 'react-native';
 import UnitClerkHeader from './AllHeaders/UnitClerkHeader';
 import PatientHeader from './AllHeaders/PatientHeader';
 import Header from './Header';
@@ -12,21 +12,28 @@ import { useNavigation } from '@react-navigation/native';
 // import { COLORS } from '../styles/colors';
 import doctorApp from './DATA/doctorApp.json';
 import { ScrollView } from 'react-native-gesture-handler';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import drinfo from './DATA/data.json';
 import Patientinfo from './DATA/patient.json';
 import patientDoc from './DATA/patientDoc.json';
+import {DevSettings} from 'react-native';
 
 
 function Item({ item }) {
     const navigation = useNavigation();   
+    console.log(item,"jee jee")
     if (item.empty === true) {
       return <View style={[styles.item, styles.itemInvisible]} />;
     }
       return (
 
         <TouchableOpacity style={styles.listItemBox}
-        onPress={() => navigation.navigate('PatientDemographics')}
+        onPress={() => navigation.navigate('PatientDemographics',{
+          patientId: item.patientId
+
+
+        })}
         >
           <View style={{flex:1}}>
             
@@ -78,7 +85,10 @@ function Item({ item }) {
  
        
             <TouchableOpacity style={[styles.smallRoundedBlueRoundedNoMargin,{marginBottom:40}]}
-                   onPress={() => navigation.navigate('PatientDemographics')} >
+                   onPress={() => navigation.navigate('PatientDemographics',{
+                    patientId: item.patientId
+
+                   })} >
               <Text style={[styles.cardText,{fontSize: 18},{color: 'white'}]}>SELECT </Text>
             </TouchableOpacity>
       
@@ -126,54 +136,155 @@ function Item({ item }) {
  const [opening, setopening] = useState([]);
  const [closing, setclosing] = useState([]);
  const [patientName, setpatientName] = useState([]);
- const [date, setDate] = useState([]);
+ 
  const [doctorName, setDoctorName] = useState([]);
  const [speciality, setSpeaciality] = useState([]);
-
+ const [refreshing, setRefreshing] = useState(true);
  const [patientDoc, setPatientDoc] = useState([]);
+ let [date, setDate] = useState('');
+ let [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+  let tempDate2;
+ const showDatePicker = () => {
+   setDatePickerVisibility(true);
+ };
+
+ const hideDatePicker = () => {
+   setDatePickerVisibility(false);
+ };
+
+ const handleConfirm = (date) => {
+   setDate(date);
+   hideDatePicker();
+ };
+
+ const getDate = () => {
+ 
+
+   let tempDate = date.toString().split(' ');
+    console.log(tempDate)
+    let month = "";
+    if(tempDate[1] == "Apr"){
+      month = "01"
+    }
+    if(tempDate[1] == "Feb"){
+      month = "02"
+    }
+    if(tempDate[1] == "Mar"){
+      month = "03"
+    }
+    if(tempDate[1] == "Apr"){
+      month = "04"
+    }
+    if(tempDate[1] == "May"){
+      month = "05"
+    }
+    if(tempDate[1] == "Jun"){
+      month = "06"
+    }
+    if(tempDate[1] == "Jul"){
+      month = "07"
+    }
+    if(tempDate[1] == "Aug"){
+      month = "08"
+    }
+    if(tempDate[1] == "Sep"){
+      month = "09"
+    }
+    if(tempDate[1] == "Oct"){
+      month = "10"
+    }
+    if(tempDate[1] == "Nov"){
+      month = "11"
+    }
+    if(tempDate[1] == "Dec"){
+      month = "12"
+    }
+    tempDate2 = tempDate[3]+ "-"+month+"-"+tempDate[2];
+    console.log(tempDate2)
+
+   return date !== ''
+     ? `${tempDate[3]}-${month}-${tempDate[2]}`
+     : '';
+  
+ };
 
  useEffect(() => {
+  loadUserData();
+  
+  
+  fetch('http://emr.daldaeagleseye.com/emrappointment/balance/today')
+  .then((response) => response.json())
+  .then((responseJson) => {
+    setRefreshing(false);
+  console.log(responseJson,'king2')
+  setopening(responseJson.result[0].opening)
+    setbalance(responseJson.result[0].balance)
+    setclosing(responseJson.result[0].closing)
+    console.log(responseJson.result[0].closing)
+
+
+  });
+
+}, []);
+
+const loadUserData = () => {
+  fetch('https://emr-system.000webhostapp.com/emrappointment/emrappointment/appointment/provider/upcoming-appointments?date='+getDate())
+      .then((response) => response.json())
+      .then((responseJson) => {
+        setRefreshing(false);
+      console.log(responseJson,'king2')
+      const data1 = formatData(responseJson.result, 3);
+      console.log(data1,'lol')
+      setPatientDoc(data1);
+      console.log(patientDoc,'queen');
+      console.log(patientDoc[0].patientId)
+   
+      
 
 
 
+
+  console.log(tempDate2)
   let one = "http://emr.daldaeagleseye.com/emrappointment/balance/today"
-  let two = "http://emr.daldaeagleseye.com/emrappointment/appointment/patient/tehreemhussain1/upcoming-appointments/"
+  let two = "https://emr-system.000webhostapp.com/emrappointment/emrappointment/appointment/provider/upcoming-appointments?date="+getDate()
    
   const requestOne = axios.get(one);
   const requestTwo = axios.get(two);
    
-  axios.all([requestOne, requestTwo]).then(axios.spread((...responses) => {
-    const responseOne = responses[0]
-    console.warn(responseOne.data)
-    setopening(responseOne.data.result[0].opening)
-    setbalance(responseOne.data.result[0].balance)
-    setclosing(responseOne.data.result[0].closing)
+//   axios.all([requestOne, requestTwo]).then(axios.spread((...responses) => {
+//     // setRefreshing(false);
+//     const responseOne = responses[0]
+//     console.warn(responseOne.data)
+//     setopening(responseOne.data.result[0].opening)
+//     setbalance(responseOne.data.result[0].balance)
+//     setclosing(responseOne.data.result[0].closing)
 
-    console.log(closing)
+//     console.log(closing)
 
-    const responseTwo = responses[1]
+//     const responseTwo = responses[1]
 
-    console.warn(responseTwo.data)
+//     console.log(responseTwo.data,'king')
 
-    const data1 = formatData(responseTwo.data.result, 3);
+//     const data1 = formatData(responseTwo.data.result, 3);
 
-    console.log("data1", data1)
-    setPatientDoc(data1);
-    console.log(patientDoc,"patientdoc")
-    console.log(patientDoc[0].appointmentId)
+//     console.log("data1", data1)
+//     setPatientDoc(data1);
+//     // console.log(patientDoc,"patientdoc")
+//     // console.log(patientDoc[0].appointmentId)
 
-  })).catch(errors => {
-      console.log(errors)
+//   })).catch(errors => {
+//       console.log(errors)
 
-  }).then(() => setLoading(false))
-
-
-}, []);
-
+ });
+};
+// const kill=DevSettings.reload()
 
     return (
   
         <View style={styles.container} >
+
+
 
 <Modal  
           animationType="slide"
@@ -220,8 +331,8 @@ function Item({ item }) {
             <View style= {[styles.headerbalance,{}]}>
 
               <View style={{width:'33%', alignItems: 'center'}}>
-              <TouchableOpacity
-            onPress={() =>navigation.navigate("HomeScreen")}>
+              {/* <TouchableOpacity */}
+            {/* onPress={() =>navigation.navigate("HomeScreen")}> */}
                 <Text style={{   fontFamily:"Montserrat-Bold",marginLeft:57,
         marginTop:10,
         color:"#3FB39B"}}
@@ -235,7 +346,7 @@ function Item({ item }) {
                   value={opening}
                   placeholderTextColor="#3FB39B"
                      onChangeText={ (Phone_Number)=> setPhone_Number(Phone_Number)}/> 
-</TouchableOpacity>
+{/* </TouchableOpacity> */}
               </View>
 
               <View style={{width:'33%', alignItems: 'center'}}>
@@ -302,7 +413,33 @@ function Item({ item }) {
             </TouchableOpacity>
     </View>
     <AppointmentHeading name="Upcomming Appointments"/>
-    {isLoading ? (
+    <View style={[{width:160,justifyContent:'center',  alignItems: 'center',  alignSelf:'center'}]}>
+      <TouchableOpacity  onPress={showDatePicker}>
+             <Text style={styles.EdittextHeading}>DOB</Text>
+             <View>
+               
+             <TextInput
+            style={[styles.Edittext,{width:160,justifyContent:'center'}]}
+            value={getDate()}
+            editable={false} 
+            selectTextOnFocus={false}
+            color="#000000"
+            placeholderTextColor="#30A28C"
+            placeholder="Date"
+              // onChangeText={DevSettings.reload()}
+/>
+<DateTimePickerModal
+        isVisible={isDatePickerVisible}
+        mode="date"
+        onConfirm={handleConfirm}
+        onCancel={hideDatePicker}
+      />
+     
+              </View>
+              </TouchableOpacity>
+           
+</View>
+    {/* {isLoading ? (
               <View style={{alignContent:'center', justifyContent: 'center',  alignSelf: 'center', marginTop: 200}}>
 
              <ActivityIndicator size="large" color="#000000"/>
@@ -310,7 +447,7 @@ function Item({ item }) {
 
              </View>
 
-                ) : (
+                ) : ( */}
                    <View style= {{flex:1 , height:"100%",width: '100%'}}>
              <SafeAreaView style={{flex:1}} >
  <FlatList
@@ -320,12 +457,15 @@ function Item({ item }) {
           renderItem={({ item }) => <Item item={item}/>}
           keyExtractor={item => item.email}
           numColumns = {numColumns}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={loadUserData} />
+          }
           // scrollEnabled={isScrollEnabled}
         /> 
 </SafeAreaView> 
 
         </View>
-)}
+      
         </View>
      
     );

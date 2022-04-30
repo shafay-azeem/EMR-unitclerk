@@ -11,10 +11,12 @@ import PatientHeader from './AllHeaders/PatientHeader';
 import { useNavigation } from '@react-navigation/native';
 
  
-  const ImagesRecords = () => {
+  const ImagesRecords = ({route}) => {
 
 
-
+    const { patient } = route.params;
+    console.log(patient)
+    console.log("lol",patient.patientId)
   const navigation = useNavigation();  
      return (
        <View style={styles.container}>
@@ -25,11 +27,14 @@ import { useNavigation } from '@react-navigation/native';
           <View>
           <Header name="Images Or Records" class= ""/>
        <UnitClerkHeader/>
-       {/* <PatientHeader/> */}
+         <PatientHeader firstName={patient.firstName} lastName = {patient.lastName} age={patient.age} phone={patient.primaryContact} mrnum={patient.mrnum}/> 
 
  
-        <View style={{flexDirection:'row',marginTop:80,marginRight:50,marginLeft:50, alignSelf:'center'}}>
-            <TouchableOpacity  onPress={() =>navigation.navigate("MoreImagesAndRecord")}>
+        <View style={{flexDirection:'row',marginTop:150,marginRight:50,marginLeft:50, alignSelf:'center'}}>
+            <TouchableOpacity  onPress={() =>navigation.navigate("MoreImagesAndRecord",{
+              patient:patient
+              
+            })}>
              <View style={{height:200,width:240,backgroundColor:'#FFFFFF', marginRight:30 ,borderRadius:10,}}> 
              <View style={{ width: 100 ,height:100,marginTop:50,marginBottom:50,alignSelf:'center'}}>
                      <Image
@@ -40,26 +45,30 @@ import { useNavigation } from '@react-navigation/native';
             </View>
             </TouchableOpacity>
 
-            <TouchableOpacity  onPress={() =>navigation.navigate("MoreImagesAndRecord")}>
+            <TouchableOpacity  onPress={() =>navigation.navigate("MoreImagesAndRecord",{
+           patient:patient
+         })}>
             
              <View style={{height:200,width:240,backgroundColor:'#FFFFFF' , marginRight:30 ,borderRadius:10 }}> 
              
              <View style={{ width: 100 ,height:100,marginTop:50,marginBottom:50,alignSelf:'center'}}>
                      <Image
                     style={{   width: '100%',height: '100%'}}
-                    source={require('../images/medical-history.png')}
+                    source={require('../images/x-ray.png')}
                     /> 
                   </View>
              </View>
              </TouchableOpacity>
 
-             <TouchableOpacity  onPress={() =>navigation.navigate("MoreImagesAndRecord")}>
+             <TouchableOpacity  onPress={() =>navigation.navigate("MoreImagesAndRecord",{
+           patient:patient
+         })}>
      
              <View style={{height:200,width:240,backgroundColor:'#FFFFFF',borderRadius:10}}> 
              <View style={{ width: 100 ,height:100,marginTop:50,marginBottom:50,alignSelf:'center'}}>
                      <Image
                     style={{   width: '100%',height: '100%'}}
-                    source={require('../images/medicine.png')}
+                    source={require('../images/volumetric-flask.png')}
                     /> 
                   </View>
                   </View>
@@ -67,15 +76,17 @@ import { useNavigation } from '@react-navigation/native';
          </View>
 
 
-         <View style={{flexDirection:'row',marginTop:30,marginRight:50,marginBottom:50,marginLeft:50, alignSelf:'center'}}>
+         {/* <View style={{flexDirection:'row',marginTop:30,marginRight:50,marginBottom:50,marginLeft:50, alignSelf:'center'}}>
 
-         <TouchableOpacity  onPress={() =>navigation.navigate("MoreImagesAndRecord")}>
+         <TouchableOpacity  onPress={() =>navigation.navigate("MoreImagesAndRecord",{
+           patient:patient
+         })}>
            
              <View style={{height:200,width:240,backgroundColor:'#FFFFFF', marginRight:30 ,borderRadius:10}}> 
              <View style={{ width: 100 ,height:100,marginTop:50,marginBottom:50,alignSelf:'center'}}>
                      <Image
                     style={{   width: '100%',height: '100%'}}
-                    source={require('../images/x-ray.png')}
+                    source={require('../images/medical-history.png')}
                     /> 
                   </View></View>
 
@@ -96,17 +107,19 @@ import { useNavigation } from '@react-navigation/native';
              </TouchableOpacity>
 
 
-             <TouchableOpacity  onPress={() =>navigation.navigate("MoreImagesAndRecord")}>
+             <TouchableOpacity  onPress={() =>navigation.navigate("MoreImagesAndRecord",{
+               patient:patient
+             })}>
              <View style={{height:200,width:240,backgroundColor:'#FFFFFF',borderRadius:10}}> 
              <View style={{ width: 100 ,height:100,alignSelf:'center',marginTop:50,marginBottom:50}}>
                      <Image
                     style={{   width: '100%',height: '100%'}}
-                    source={require('../images/volumetric-flask.png')}
+                    source={require('../images/medicine.png')}
                     /> 
                   </View>
            </View>
            </TouchableOpacity>
-         </View>
+         </View> */}
 
          </View>
            

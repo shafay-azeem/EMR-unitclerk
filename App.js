@@ -36,7 +36,7 @@ import PaymentSuccessfull from "./Screens/PaymentSuccessful";
 import Example from "./Screens/Example";
 
 import AppointmentDetails from "./Screens/AppointmentDetails";
-import UpdatePatient from "./Screens/UpdatePatient";
+import RecordsSee from "./Screens/RecordsSee";
 import CreateSlot from "./Screens/CreateSlots";
 import OpeningBal from "./Screens/Openingbal";
 import Receipt from "./Screens/Receipt";
@@ -65,7 +65,7 @@ const App = () => {
 
   return(
     <NavigationContainer>
-    <Stack.Navigator initialRouteName="SignInScreen"
+    <Stack.Navigator initialRouteName="HomeScreen"
       screenOptions={{headerShown:false}}>
 
 {/* 
@@ -222,8 +222,8 @@ const App = () => {
         component={AppointmentDetails}
       />
                 <Stack.Screen
-        name="UpdatePatient"
-        component={UpdatePatient}
+        name="RecordsSee"
+        component={RecordsSee}
       />
 
 

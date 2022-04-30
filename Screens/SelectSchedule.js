@@ -99,16 +99,17 @@ function Item({ item , doctorInfo, patient}) {
     const [schedule, setSchedule] = useState([]);
     const { doctorInfo } = route.params;
     const { patient } = route.params;
+    console.log(patient)
   
 
 
-    // console.log(provider)
+    console.log(doctorInfo.providerId,"sss")
 
     useEffect(() => {
 
 // console.log(provider)
 // console.log(speciality,"speciality")
-let one = "https://emr-system.000webhostapp.com/emrappointment/emrappointment/appointment/provider/weekly-schedule/schedule?provider=demodoctor1"
+let one = "https://emr-system.000webhostapp.com/emrappointment/emrappointment/appointment/provider/weekly-schedule/schedule?provider="+doctorInfo.providerId
 const requestOne = axios.get(one);
 
  

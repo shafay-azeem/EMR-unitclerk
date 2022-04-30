@@ -22,7 +22,8 @@ import { FadeFromBottomAndroid } from '@react-navigation/stack/lib/typescript/sr
   const { slotDetails } = route.params;
   const { doctorInfo } = route.params;
   const { patient } = route.params;
-
+  console.log(patient,"payment")
+  
   let [method, setmethod] = useState('Cash');
 
 
@@ -170,7 +171,7 @@ import { FadeFromBottomAndroid } from '@react-navigation/stack/lib/typescript/sr
               <View style = {{width: '50%' ,flex:1}}>
 
                 
-                <TouchableOpacity
+                {/* <TouchableOpacity
                   onPress={() =>navigation.navigate('Payment', {
                     doctorInfo: doctorInfo,
                     slotDetails: slotDetails
@@ -180,7 +181,7 @@ import { FadeFromBottomAndroid } from '@react-navigation/stack/lib/typescript/sr
                    <Text style={styles.Button_text_styling}
                 onPress={()=>{setactive(!active)}}
                             >Apply Promo Code</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
 
 {/*  
 

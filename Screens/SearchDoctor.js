@@ -10,7 +10,6 @@ import UnitClerkHeader from './AllHeaders/UnitClerkHeader';
 import PatientHeader from './AllHeaders/PatientHeader';
 
 const SearchDoctor = ({route}) => {
-  
   const navigation = useNavigation();
   const { patient } = route.params;
 
@@ -20,6 +19,8 @@ const SearchDoctor = ({route}) => {
   let [specifyDoctor, setSpecifyDoctor] = useState('');
   let [phone, setPhone] = useState('');
   let [mrNumber, setMrNumber] = useState('');
+  console.log("search doc here" ,patient)
+
     return (
     
       <SafeAreaView style={[styles.container,{flex: 1}]}>
@@ -28,7 +29,7 @@ const SearchDoctor = ({route}) => {
       <View style={{backgroundColor:'#38AB94'}}> 
            <Header style={{height:"20%"}} name="Search Doctor " class= ""/>
            <UnitClerkHeader/>
-           <PatientHeader firstName={patient.firstName} lastName = {patient.lastName} age={patient.age} phone={patient.primaryContact} mrnum={patient.mrnum}/>
+           {/* <PatientHeader firstName={patient.firstName} lastName = {patient.lastName} age={patient.age} phone={patient.primaryContact} mrnum={patient.mrnum}/> */}
            </View>
            <View style={styles.containerWithinScrollView} >
            <Text style = {[styles.mediumText,{alignSelf:'center'}]}>SEARCH DOCTOR BY:
